@@ -1,11 +1,11 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import Map from "ol/Map";
 import View from "ol/View";
 import TileLayer from "ol/layer/Tile";
 import XYZ from "ol/source/XYZ";
 // import OSM from "ol/source/OSM";
+// import { defaults } from "ol/interaction.js";
 import "./mapped.css";
-import { useEffect } from "react";
 
 const Mapped = () => {
     const mapElement = useRef();
@@ -26,8 +26,23 @@ const Mapped = () => {
             ],
             view: new View({
                 center: [0, 0],
-                zoom: 2,
+                zoom: 4,
             }),
+            // interactions: defaults({
+            //     // doubleClickZoom: false,
+            //     // dragAndDrop: false,
+            //     // dragPan: true,
+            //     // keyboardPan: true,
+            //     // keyboardZoom: true,
+            //     // mouseWheelZoom: true,
+            //     // pointer: false,
+            //     // select: false,
+            // }),
+            // controls: defaults({
+            //     attribution: false,
+            //     zoom: false,
+            // }),
+            keyboardEventTarget: document,
         });
     }, []);
 
