@@ -3,8 +3,8 @@ import Map from "ol/Map";
 import View from "ol/View";
 import TileLayer from "ol/layer/Tile";
 import XYZ from "ol/source/XYZ";
+import { defaults } from "ol/interaction.js";
 // import OSM from "ol/source/OSM";
-// import { defaults } from "ol/interaction.js";
 import "./mapped.css";
 
 const Mapped = () => {
@@ -28,22 +28,38 @@ const Mapped = () => {
                 center: [0, 0],
                 zoom: 4,
             }),
-            // interactions: defaults({
-            //     // doubleClickZoom: false,
-            //     // dragAndDrop: false,
-            //     // dragPan: true,
-            //     // keyboardPan: true,
-            //     // keyboardZoom: true,
-            //     // mouseWheelZoom: true,
-            //     // pointer: false,
-            //     // select: false,
-            // }),
+            interactions: defaults({
+                // doubleClickZoom: false,
+                // dragAndDrop: false,
+                // dragPan: true,
+                // keyboardPan: false,
+                // keyboardZoom: true,
+                // mouseWheelZoom: true,
+                // pointer: false,
+                // select: false,
+            }),
             // controls: defaults({
-            //     attribution: false,
-            //     zoom: false,
+            //     attribution: true,
+            //     attributionOptions: true,
+            //     zoom: true,
+            //     zoomOptions: true,
             // }),
             keyboardEventTarget: document,
         });
+    }, []);
+
+    useEffect(() => {
+        const callback = (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.code === "KeyI") {
+                console.log("Pressed Control + I");
+            }
+        };
+
+        document.addEventListener("keydown", callback);
+
+        return () => {
+            document.removeEventListener("keydown", callback);
+        };
     }, []);
 
     return (
