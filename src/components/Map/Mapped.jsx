@@ -3,9 +3,10 @@ import Map from "ol/Map";
 import View from "ol/View";
 import TileLayer from "ol/layer/Tile";
 import XYZ from "ol/source/XYZ";
-import { defaults } from "ol/interaction.js";
+// import { defaults } from "ol/interaction.js";
 // import OSM from "ol/source/OSM";
 import "./mapped.css";
+import ToolsSection from "../Tools/ToolsSection";
 
 const Mapped = () => {
     const mapElement = useRef();
@@ -26,23 +27,21 @@ const Mapped = () => {
             ],
             view: new View({
                 center: [0, 0],
-                zoom: 4,
+                zoom: 2,
             }),
-            interactions: defaults({
-                // doubleClickZoom: false,
-                // dragAndDrop: false,
-                // dragPan: true,
-                keyboardPan: false,
-                // keyboardZoom: true,
-                // mouseWheelZoom: true,
-                // pointer: false,
-                // select: false,
-            }),
+            // interactions: defaults({
+            //     // doubleClickZoom: false,
+            //     // dragAndDrop: false,
+            //     dragPan: true,
+            //     keyboardPan: true,
+            //     // keyboardZoom: true,
+            //     // mouseWheelZoom: true,
+            //     // pointer: false,
+            //     // select: false,
+            // }),
             // controls: defaults({
-            //     attribution: true,
-            //     attributionOptions: true,
-            //     zoom: true,
-            //     zoomOptions: true,
+            //     attribution: false,
+            //     zoom: false,
             // }),
             keyboardEventTarget: document,
         });
@@ -64,7 +63,9 @@ const Mapped = () => {
 
     return (
         <div>
-            <div ref={mapElement} className="map-container"></div>
+            <div ref={mapElement} className="map-container">
+                <ToolsSection />
+            </div>
         </div>
     );
 };

@@ -1,0 +1,14 @@
+.draw-tool {
+    width: 25px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.tools-div {
+    width: 35px;
+    position: absolute;
+    z-index: 1000;
+    left: 15px;
+    top: 60px;
+    background-color: rgb(197, 197, 197);
+}
