@@ -32,7 +32,7 @@ const Mapped = () => {
                 // doubleClickZoom: false,
                 // dragAndDrop: false,
                 // dragPan: true,
-                // keyboardPan: false,
+                keyboardPan: false,
                 // keyboardZoom: true,
                 // mouseWheelZoom: true,
                 // pointer: false,
