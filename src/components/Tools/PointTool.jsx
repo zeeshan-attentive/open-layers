@@ -11,7 +11,7 @@ const PointTool = ({ setSelectedTool }) => {
             <img
                 onClick={handleClick}
                 className="draw-tool"
-                src="https://cdn-icons.flaticon.com/png/512/2740/premium/2740706.png?token=exp=1658491540~hmac=d8e360411069dd501a100d3f7be386e6"
+                src="https://cdn-icons-png.flaticon.com/512/3601/3601885.png"
                 alt=""
             />
         </div>
