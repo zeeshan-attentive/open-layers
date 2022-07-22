@@ -11,7 +11,7 @@ import ToolsSection from "../Tools/ToolsSection";
 import { useState } from "react";
 
 const Mapped = () => {
-    const [selectedTool, setSelectedTool] = useState("None");
+    const [selectedTool, setSelectedTool] = useState("Polygon");
     console.log(selectedTool);
 
     const mapElement = useRef();
@@ -74,8 +74,7 @@ const Mapped = () => {
             addInteraction();
             console.log(draw, "draw");
         }
-        
-        console.log(draw);
+
         changeGeometry();
         addInteraction();
     }, [selectedTool]);
