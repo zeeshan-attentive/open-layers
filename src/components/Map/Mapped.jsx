@@ -1,33 +1,43 @@
 import React, { useRef, useEffect } from "react";
 import Map from "ol/Map";
 import View from "ol/View";
-import TileLayer from "ol/layer/Tile";
 import XYZ from "ol/source/XYZ";
-// import { defaults } from "ol/interaction.js";
-// import OSM from "ol/source/OSM";
+import { Vector as VectorSource } from "ol/source";
+import { Tile as TileLayer, Vector as VectorLayer } from "ol/layer";
+import Draw from "ol/interaction/Draw";
+import { defaults } from "ol/interaction.js";
 import "./mapped.css";
 import ToolsSection from "../Tools/ToolsSection";
+import { useState } from "react";
 
 const Mapped = () => {
+    const [selectedTool, setSelectedTool] = useState("None");
+    console.log(selectedTool);
+
     const mapElement = useRef();
 
     const GOOGLE_IMAGERY_SATELLITE =
         "https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}?v=1";
 
     useEffect(() => {
-        new Map({
+        const raster = new TileLayer({
+            source: new XYZ({
+                url: GOOGLE_IMAGERY_SATELLITE,
+            }),
+        });
+
+        const source = new VectorSource({ wrapX: false });
+
+        const vector = new VectorLayer({
+            source: source,
+        });
+
+        const map = new Map({
             target: mapElement.current,
-            layers: [
-                new TileLayer({
-                    source: new XYZ({
-                        url: GOOGLE_IMAGERY_SATELLITE,
-                    }),
-                    // source: new OSM(),
-                }),
-            ],
+            layers: [raster, vector],
             view: new View({
                 center: [0, 0],
-                zoom: 2,
+                zoom: 3,
             }),
             // interactions: defaults({
             //     // doubleClickZoom: false,
@@ -39,13 +49,36 @@ const Mapped = () => {
             //     // pointer: false,
             //     // select: false,
             // }),
-            // controls: defaults({
-            //     attribution: false,
-            //     zoom: false,
-            // }),
+            controls: defaults({
+                attribution: false,
+                zoom: false,
+            }),
             keyboardEventTarget: document,
         });
-    }, []);
+
+        let draw;
+
+        function addInteraction() {
+            if (selectedTool !== "None") {
+                draw = new Draw({
+                    source: source,
+                    type: selectedTool,
+                });
+                map.addInteraction(draw);
+            }
+        }
+
+        function changeGeometry() {
+            map.removeInteraction(draw);
+            console.log(selectedTool);
+            addInteraction();
+            console.log(draw, "draw");
+        }
+        
+        console.log(draw);
+        changeGeometry();
+        addInteraction();
+    }, [selectedTool]);
 
     useEffect(() => {
         const callback = (e) => {
@@ -64,7 +97,7 @@ const Mapped = () => {
     return (
         <div>
             <div ref={mapElement} className="map-container">
-                <ToolsSection />
+                <ToolsSection setSelectedTool={setSelectedTool} />
             </div>
         </div>
     );

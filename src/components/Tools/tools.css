@@ -10,5 +10,6 @@
     z-index: 1000;
     left: 15px;
     top: 60px;
-    background-color: rgb(197, 197, 197);
+    background-color: rgb(222, 222, 222);
+    border-radius: 10px;
 }
