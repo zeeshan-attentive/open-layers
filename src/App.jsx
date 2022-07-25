@@ -1,12 +1,8 @@
 import "./App.css";
-import Mapped from "./components/Map/Mapped";
+import MapComponent from "./components/MapComponent";
 
 function App() {
-    return (
-        <div className="App">
-            <Mapped />
-        </div>
-    );
+  return <MapComponent />;
 }
 
 export default App;

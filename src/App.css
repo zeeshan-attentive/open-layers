@@ -2,3 +2,25 @@ body {
   overflow-y: hidden;
   overflow-x: hidden;
 }
+
+.map-container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+.draw-tool {
+  width: 25px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.tools-div {
+  width: 35px;
+  position: absolute;
+  z-index: 1000;
+  left: 15px;
+  top: 60px;
+  background-color: rgb(222, 222, 222);
+  border-radius: 10px;
+}
