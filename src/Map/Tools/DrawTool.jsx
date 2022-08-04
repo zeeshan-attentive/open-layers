@@ -1,17 +1,15 @@
 import React from "react";
-import { mapObj } from "..";
+// import { mapObj } from "../index";
 
-const DrawTool = ({ geomType }) => {
-  const handleClick = () => {};
+const DrawTool = ({ geomType, image, setCancelBox }) => {
+  const handleClick = () => {
+    setCancelBox("block");
+    // mapObj.drawGeometry("LineString");
+  };
 
   return (
     <div>
-      <img
-        onClick={handleClick}
-        className="draw-tool"
-        src="https://cdn-icons-png.flaticon.com/512/876/876225.png"
-        alt=""
-      />
+      <img onClick={handleClick} className="draw-tool" src={image} alt="" />
     </div>
   );
 };

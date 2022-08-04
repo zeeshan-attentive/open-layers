@@ -7,7 +7,7 @@ export const LINESTRING_LAYER_ID = "LINESTRING_LAYER";
 export const POINT_LAYER_ID = "POINT_LAYER";
 
 export const GEOMETRY_TYPE = {
-  POLYGON: 1,
-  LINESTRING: 2,
+  LINESTRING: 1,
+  POLYGON: 2,
   POINT: 3,
 };
