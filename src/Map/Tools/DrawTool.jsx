@@ -1,11 +1,19 @@
-import React from "react";
-// import { mapObj } from "../index";
+import React, { useEffect } from "react";
+import { mapObj } from "../index";
 
 const DrawTool = ({ geomType, image, setCancelBox }) => {
   const handleClick = () => {
     setCancelBox("block");
-    // mapObj.drawGeometry("LineString");
+    mapObj.drawGeometry(geomType);
   };
+  
+  useEffect(() => {
+
+
+    // return () => {
+    //   mapObj.changeInteraction(geomType);
+    // };
+  }, [geomType]);
 
   return (
     <div>

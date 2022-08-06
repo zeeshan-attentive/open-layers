@@ -2,12 +2,19 @@ export const GOOGLE_IMAGERY_SATELLITE =
   "https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}?v=1";
 
 export const BASE_LAYER_ID = "BASE_LAYER";
-export const POLYGON_LAYER_ID = "POLYGON_LAYER";
 export const LINESTRING_LAYER_ID = "LINESTRING_LAYER";
+export const POLYGON_LAYER_ID = "POLYGON_LAYER";
 export const POINT_LAYER_ID = "POINT_LAYER";
 
 export const GEOMETRY_TYPE = {
   LINESTRING: 1,
   POLYGON: 2,
   POINT: 3,
+};
+
+export const GEOMETRY_TYPE_STRING = {
+  [GEOMETRY_TYPE.LINESTRING]: "LineString",
+  [GEOMETRY_TYPE.POLYGON]: "Polygon",
+  [GEOMETRY_TYPE.POINT]: "Point",
+  [GEOMETRY_TYPE.CIRCLE]: "Circle",
 };

@@ -5,16 +5,23 @@ import OlMap from "ol/Map";
 import View from "ol/View";
 import { XYZ } from "ol/source";
 import { defaults } from "ol/control";
-import { GOOGLE_IMAGERY_SATELLITE } from "../Constants";
+import {
+  BASE_LAYER_ID,
+  GEOMETRY_TYPE_STRING,
+  GOOGLE_IMAGERY_SATELLITE,
+  LINESTRING_LAYER_ID,
+  POINT_LAYER_ID,
+  POLYGON_LAYER_ID,
+} from "../Constants";
 import Draw from "ol/interaction/Draw";
-import { LINESTRING_LAYER_ID } from "../Constants";
 
 export class Map {
   constructor() {
     this.map = null;
     this.selectedLayer = null;
     this.draw = null;
-    this.source = new VectorSource({ wrapX: false });
+    this.source = null;
+    this.featureId = 0;
   }
 
   initMap() {
@@ -39,6 +46,7 @@ export class Map {
 
   addBaseLayer() {
     const raster = new TileLayer({
+      id: BASE_LAYER_ID,
       source: new XYZ({
         url: GOOGLE_IMAGERY_SATELLITE,
       }),
@@ -47,42 +55,85 @@ export class Map {
   }
 
   addVectorLayer() {
-    const vector = new VectorLayer({
-      source: this.source,
+    const vectorLine = new VectorLayer({
+      id: LINESTRING_LAYER_ID,
+      source: new VectorSource({ wrapX: false }),
     });
 
-    this.selectedLayer = vector;
-    this.map.addLayer(vector);
+    const vectorPolygon = new VectorLayer({
+      id: POLYGON_LAYER_ID,
+      source: new VectorSource({ wrapX: false }),
+    });
+
+    const vectorPoint = new VectorLayer({
+      id: POINT_LAYER_ID,
+      source: new VectorSource({ wrapX: false }),
+    });
+
+    this.map.addLayer(vectorLine);
+    this.map.addLayer(vectorPolygon);
+    this.map.addLayer(vectorPoint);
   }
 
-  drawGeometry(drawType) {
-    this.draw = new Draw({
-      source: this.source,
-      type: drawType,
-    });
+  drawGeometry(geomType) {
+    console.log(geomType);
 
-    // this.draw.on("drawstart", (event) => {
-    //   console.log("start");
-    // });
+    if (this.map && geomType !== "none") {
+      if (geomType === 1) {
+        this.map.getAllLayers().forEach((layer) => {
+          if (layer.values_.id === LINESTRING_LAYER_ID) {
+            this.source = layer.getSource();
+            this.tool = "LineString";
+          }
+        });
+      } else if (geomType === 2) {
+        this.map.getAllLayers().forEach((layer) => {
+          if (layer.values_.id === POLYGON_LAYER_ID) {
+            this.source = layer.getSource();
+            this.tool = "Polygon";
+          }
+        });
+      } else {
+        this.map.getAllLayers().forEach((layer) => {
+          if (layer.values_.id === POINT_LAYER_ID) {
+            this.source = layer.getSource();
+            this.tool = "Point";
+          }
+        });
+      }
 
-    this.draw.on("drawend", (event) => {
-      console.log("end");
-      event.feature.setProperties({
-        id: LINESTRING_LAYER_ID,
+      console.log(this.source);
+
+      this.draw = new Draw({
+        source: this.source,
+        type: GEOMETRY_TYPE_STRING[geomType],
       });
-    });
 
-    this.map.addInteraction(this.draw);
+      // this.draw.on("drawstart", (event) => {
+      // });
+
+      // this.draw.on("drawend", (event) => {
+      // console.log("end");
+      // event.feature.setProperties({
+      //   id: this.featureId,
+      // });
+      // this.featureId++;
+      // });
+
+      console.log(this.draw);
+
+      this.map.addInteraction(this.draw);
+    }
   }
 
   // cancelInteraction() {
   //   this.map.removeInteraction(this.draw);
   // }
 
-  // changeInteraction() {
-  //   this.map.removeInteraction(this.draw);
-  //   this.addDrawTool(this.draw);
-  // }
+  changeInteraction(geomType) {
+    this.map.removeInteraction(this.draw);
+    this.drawGeometry(geomType);
+  }
 
   // undoPoint() {
   //   this.draw.removeLastPoint();

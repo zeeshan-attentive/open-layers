@@ -3,7 +3,7 @@ import { GEOMETRY_TYPE } from "../Constants";
 import DrawTool from "../Map/Tools/DrawTool";
 // import { mapObj } from "../Map";
 
-const Toolbar = () => {
+const Toolbar = ({drawTool}) => {
   const [cancelBox, setCancelBox] = useState("none");
 
   const handleCancel = () => {
