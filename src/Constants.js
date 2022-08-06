@@ -16,5 +16,4 @@ export const GEOMETRY_TYPE_STRING = {
   [GEOMETRY_TYPE.LINESTRING]: "LineString",
   [GEOMETRY_TYPE.POLYGON]: "Polygon",
   [GEOMETRY_TYPE.POINT]: "Point",
-  [GEOMETRY_TYPE.CIRCLE]: "Circle",
 };
