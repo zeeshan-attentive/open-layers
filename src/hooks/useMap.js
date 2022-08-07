@@ -1,4 +1,4 @@
-import { useCallback, useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector";
 import { Vector as VectorSource } from "ol/source";
@@ -10,9 +10,6 @@ import {
   BASE_LAYER_ID,
   GEOMETRY_TYPE_STRING,
   GOOGLE_IMAGERY_SATELLITE,
-  LINESTRING_LAYER_ID,
-  POINT_LAYER_ID,
-  POLYGON_LAYER_ID,
 } from "../Constants";
 
 import Draw from "ol/interaction/Draw";
