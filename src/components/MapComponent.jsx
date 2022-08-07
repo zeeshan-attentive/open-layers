@@ -1,22 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { mapObj } from "../Map/index";
+import { useMap } from "../hooks/useMap";
 import Toolbar from "./Toolbar";
 
+export const MapContext = React.createContext();
+
 const MapComponent = () => {
-  // const [drawType, setDrawType] = useState("LineString");
-
-  useEffect(() => {
-    mapObj.initMap();
-  }, []);
-
-  // useEffect(() => {
-  //   mapObj.drawGeometry(drawType);
-  // }, [drawType]);
+  const map = useMap();
 
   return (
-    <div id="map" className="map-container">
-      <Toolbar />
-    </div>
+    <MapContext.Provider value={map}>
+      <div id="map" className="map-container">
+        <Toolbar />
+      </div>
+    </MapContext.Provider>
   );
 };
 

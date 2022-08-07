@@ -1,18 +1,12 @@
 import React, { useState } from "react";
 import { GEOMETRY_TYPE } from "../Constants";
-import DrawTool from "../Map/Tools/DrawTool";
-// import { mapObj } from "../Map";
+import DrawTool from "../Tools/DrawTool";
 
-const Toolbar = ({drawTool}) => {
+const Toolbar = ({ drawTool }) => {
   const [cancelBox, setCancelBox] = useState("none");
 
   const handleCancel = () => {
     setCancelBox("none");
-    // mapObj.cancelInteraction();
-  };
-
-  const handleUndo = () => {
-    // mapObj.undoPoint();
   };
 
   return (
@@ -38,9 +32,6 @@ const Toolbar = ({drawTool}) => {
       />
       <div className="cancel-box" style={{ display: cancelBox }}>
         <span onClick={handleCancel}>Cancel</span>
-        <span onClick={handleUndo} style={{ marginLeft: "15px" }}>
-          Undo
-        </span>
       </div>
     </div>
   );

@@ -9,18 +9,15 @@ import {
   BASE_LAYER_ID,
   GEOMETRY_TYPE_STRING,
   GOOGLE_IMAGERY_SATELLITE,
-  LINESTRING_LAYER_ID,
-  POINT_LAYER_ID,
-  POLYGON_LAYER_ID,
+  VECTOR_LAYER_ID,
 } from "../Constants";
 import Draw from "ol/interaction/Draw";
 
 export class Map {
   constructor() {
     this.map = null;
-    this.selectedLayer = null;
+    // this.selectedLayer = null;
     this.draw = null;
-    this.source = null;
     this.featureId = 0;
   }
 
@@ -41,7 +38,6 @@ export class Map {
     });
 
     this.addBaseLayer();
-    this.addVectorLayer();
   }
 
   addBaseLayer() {
@@ -54,58 +50,32 @@ export class Map {
     this.map.addLayer(raster);
   }
 
-  addVectorLayer() {
-    const vectorLine = new VectorLayer({
-      id: LINESTRING_LAYER_ID,
+  addVectorLayer(layerId) {
+    const layer = new VectorLayer({
+      id: layerId,
       source: new VectorSource({ wrapX: false }),
     });
 
-    const vectorPolygon = new VectorLayer({
-      id: POLYGON_LAYER_ID,
-      source: new VectorSource({ wrapX: false }),
-    });
-
-    const vectorPoint = new VectorLayer({
-      id: POINT_LAYER_ID,
-      source: new VectorSource({ wrapX: false }),
-    });
-
-    this.map.addLayer(vectorLine);
-    this.map.addLayer(vectorPolygon);
-    this.map.addLayer(vectorPoint);
+    this.map.addLayer(layer);
   }
 
   drawGeometry(geomType) {
     console.log(geomType);
-
     if (this.map && geomType !== "none") {
-      if (geomType === 1) {
-        this.map.getAllLayers().forEach((layer) => {
-          if (layer.values_.id === LINESTRING_LAYER_ID) {
-            this.source = layer.getSource();
-            this.tool = "LineString";
-          }
-        });
-      } else if (geomType === 2) {
-        this.map.getAllLayers().forEach((layer) => {
-          if (layer.values_.id === POLYGON_LAYER_ID) {
-            this.source = layer.getSource();
-            this.tool = "Polygon";
-          }
-        });
-      } else {
-        this.map.getAllLayers().forEach((layer) => {
-          if (layer.values_.id === POINT_LAYER_ID) {
-            this.source = layer.getSource();
-            this.tool = "Point";
-          }
-        });
-      }
+      this.addVectorLayer(VECTOR_LAYER_ID[geomType]);
 
-      console.log(this.source);
+      let layerSource;
+
+      this.map.getAllLayers().forEach((layer) => {
+        if (layer.values_.id === VECTOR_LAYER_ID[geomType]) {
+          layerSource = layer.getSource();
+        }
+      });
+
+      console.log(layerSource);
 
       this.draw = new Draw({
-        source: this.source,
+        source: layerSource,
         type: GEOMETRY_TYPE_STRING[geomType],
       });
 
@@ -126,9 +96,9 @@ export class Map {
     }
   }
 
-  // cancelInteraction() {
-  //   this.map.removeInteraction(this.draw);
-  // }
+  cancelInteraction() {
+    this.map.removeInteraction(this.draw);
+  }
 
   changeInteraction(geomType) {
     this.map.removeInteraction(this.draw);

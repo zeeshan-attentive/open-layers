@@ -6,13 +6,13 @@ const DrawTool = ({ geomType, image, setCancelBox }) => {
     setCancelBox("block");
     mapObj.drawGeometry(geomType);
   };
-  
+
   useEffect(() => {
+    mapObj.drawGeometry(geomType);
 
-
-    // return () => {
-    //   mapObj.changeInteraction(geomType);
-    // };
+    return () => {
+      mapObj.cancelInteraction(geomType);
+    };
   }, [geomType]);
 
   return (
