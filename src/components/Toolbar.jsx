@@ -11,14 +11,16 @@ const Toolbar = () => {
 
   const map = useContext(MapContext);
 
-  const handleCancel = () => {
+  const handleCancel = (type) => {
     map.cancelInteraction();
+    map.cancelEdit(type);
     setCancelBox("none");
     setPopupFlag(false);
   };
 
   const handleCancel1 = () => {
     map.cancelInteraction();
+    map.cancelEdit();
     setCancelBox1("none");
     setPopupFlag(false);
   };
@@ -27,6 +29,10 @@ const Toolbar = () => {
     map.cancelInteraction();
     setCancelBox2("none");
     setPopupFlag(false);
+  };
+
+  const handleEdit = (editGeomType) => {
+    map.editFeatures(editGeomType);
   };
 
   return (
@@ -57,7 +63,13 @@ const Toolbar = () => {
         }
       />
       <div className="cancel-box" style={{ display: cancelBox }}>
-        <span onClick={handleCancel}>Cancel</span>
+        <span
+          onClick={() => handleCancel(GEOMETRY_TYPE.LINESTRING)}
+          style={{ marginRight: "10px" }}
+        >
+          Cancel
+        </span>
+        <span onClick={() => handleEdit(GEOMETRY_TYPE.LINESTRING)}>Edit</span>
       </div>
       <div className="cancel-box1" style={{ display: cancelBox1 }}>
         <span onClick={handleCancel1}>Cancel</span>

@@ -11,7 +11,6 @@ const DrawTool = ({
   const map = useContext(MapContext);
 
   const handleClick = () => {
-    // console.log()
     if (!popupFlag) {
       setPopupFlag(true);
       map.drawGeometry(geomType);

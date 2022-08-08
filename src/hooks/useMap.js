@@ -11,12 +11,20 @@ import {
   GEOMETRY_TYPE_STRING,
   GOOGLE_IMAGERY_SATELLITE,
 } from "../Constants";
-
-import Draw from "ol/interaction/Draw";
+import {
+  Draw,
+  Modify,
+  // Select,
+  Snap,
+  // defaults as defaultInteractions,
+} from "ol/interaction";
+import { Style, Stroke } from "ol/style";
 
 export const useMap = () => {
   const [map, setMap] = useState();
   const draw = useRef();
+  const snap = useRef();
+  const modify = useRef();
 
   useEffect(() => {
     const rasterlayer = new TileLayer({
@@ -24,7 +32,16 @@ export const useMap = () => {
       source: new XYZ({ url: GOOGLE_IMAGERY_SATELLITE }),
     });
 
+    // const select = new Select({
+    //   wrapX: false,
+    // });
+
+    // const modify = new Modify({
+    //   features: select.getFeatures(),
+    // });
+
     const olMap = new OlMap({
+      // interactions: defaultInteractions().extend([select, modify]),
       target: "map",
       layers: [rasterlayer],
       view: new View({ center: [0, 0], zoom: 3, maxZoom: 24 }),
@@ -40,11 +57,10 @@ export const useMap = () => {
   }, []);
 
   const addVectorLayer = (id) => {
-    if (!map) return;
-
     const vectorLayer = new VectorLayer({
       id: id,
       source: new VectorSource(),
+      wrapX: false,
     });
 
     map.addLayer(vectorLayer);
@@ -52,8 +68,6 @@ export const useMap = () => {
   };
 
   const drawGeometry = (geomType) => {
-    if (!map) return;
-
     draw.current && map.removeInteraction(draw.current);
 
     let layer;
@@ -72,9 +86,14 @@ export const useMap = () => {
       type: GEOMETRY_TYPE_STRING[geomType],
     });
 
-    draw.current.on("drawstart", (e) => {});
+    draw.current.on("drawend", (e) => {
+      // console.log(e);
+    });
 
     map.addInteraction(draw.current);
+
+    snap.current = new Snap({ source: source });
+    map.addInteraction(snap.current);
   };
 
   const cancelInteraction = () => {
@@ -83,5 +102,61 @@ export const useMap = () => {
     draw.current && map.removeInteraction(draw.current);
   };
 
-  return { drawGeometry, cancelInteraction };
+  const editFeatures = (type) => {
+    let layer;
+    map.getAllLayers().forEach((lyr) => {
+      if (lyr.get("id") === type) {
+        layer = lyr;
+      }
+    });
+
+    if (!layer) return;
+
+    const source = layer.getSource();
+    modify.current = new Modify({ source: source });
+
+    source.forEachFeature(function (feature) {
+      let style = new Style({
+        stroke: new Stroke({
+          color: "#FF5733",
+          width: 2,
+          lineDash: [6],
+        }),
+      });
+
+      feature.setStyle(style);
+    });
+
+    map.removeInteraction(draw.current);
+    map.addInteraction(modify.current);
+  };
+
+  const cancelEdit = (type) => {
+    map.removeInteraction(modify.current);
+
+    let layer;
+    map.getAllLayers().forEach((lyr) => {
+      if (lyr.get("id") === type) {
+        layer = lyr;
+      }
+    });
+
+    if (!layer) return;
+
+    const source = layer.getSource();
+    modify.current = new Modify({ source: source });
+
+    source.forEachFeature(function (feature) {
+      let style = new Style({
+        stroke: new Stroke({
+          color: "#4589A9",
+          width: 1.2,
+        }),
+      });
+
+      feature.setStyle(style);
+    });
+  };
+
+  return { drawGeometry, cancelInteraction, editFeatures, cancelEdit };
 };
