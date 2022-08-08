@@ -77,5 +77,11 @@ export const useMap = () => {
     map.addInteraction(draw.current);
   };
 
-  return { drawGeometry };
+  const cancelInteraction = () => {
+    if (!map) return;
+
+    draw.current && map.removeInteraction(draw.current);
+  };
+
+  return { drawGeometry, cancelInteraction };
 };
