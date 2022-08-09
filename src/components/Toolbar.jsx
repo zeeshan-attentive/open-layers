@@ -8,6 +8,7 @@ const Toolbar = () => {
   const [cancelBox2, setCancelBox2] = useState("none");
   const [cancelBox3, setCancelBox3] = useState("none");
   const [popupFlag, setPopupFlag] = useState(false);
+  const [importToggle, setImportToggle] = useState(false);
 
   const map = useContext(MapContext);
 
@@ -26,6 +27,20 @@ const Toolbar = () => {
 
   const handleEdit = (editGeomType) => {
     map.editFeatures(editGeomType);
+  };
+
+  const handleImport = () => {
+    if (!importToggle) {
+      setImportToggle(true);
+      map.renderGeojson();
+    } else {
+      setImportToggle(false);
+      map.removeGeojson();
+    }
+  };
+
+  const handleExport = () => {
+    map.exportGeojson();
   };
 
   return (
@@ -81,6 +96,15 @@ const Toolbar = () => {
           Cancel
         </span>
         <span onClick={() => handleEdit(GEOMETRY_TYPE.POINT)}>Edit</span>
+      </div>
+      <div className="import-button">
+        <button
+          onClick={handleImport}
+          style={{ cursor: "pointer", marginBottom: "10px" }}
+        >
+          Import
+        </button>
+        <button onClick={handleExport}>Export</button>
       </div>
     </div>
   );

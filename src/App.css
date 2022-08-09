@@ -56,3 +56,9 @@ body {
   padding: 4px;
   font-size: 14px;
 }
+
+.import-button {
+  position: absolute;
+  cursor: pointer;
+  top: 120px;
+}

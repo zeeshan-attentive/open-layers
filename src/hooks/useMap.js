@@ -13,6 +13,8 @@ import {
 } from "../Constants";
 import { Draw, Modify, Snap } from "ol/interaction";
 import { Style, Stroke, Circle, Fill } from "ol/style";
+import GeoJSON from "ol/format/GeoJSON";
+import data from "../files/random.json";
 
 export const useMap = () => {
   const [map, setMap] = useState();
@@ -82,9 +84,7 @@ export const useMap = () => {
   };
 
   const cancelInteraction = () => {
-    if (!map) return;
-
-    draw.current && map.removeInteraction(draw.current);
+    map.removeInteraction(draw.current);
   };
 
   const editFeatures = (type) => {
@@ -100,13 +100,14 @@ export const useMap = () => {
     const source = layer.getSource();
     modify.current = new Modify({ source: source });
 
-    source.forEachFeature(function (feature) {
+    source.forEachFeature((feature) => {
       let style = new Style({
         stroke: new Stroke({
           color: "#FF5733",
           width: 2,
           lineDash: [6],
         }),
+        fill: new Fill({ color: "rgba(255,255,255,0.4)" }),
         image: new Circle({
           radius: 7,
           fill: new Fill({ color: "rgba(255,255,255,0.4)" }),
@@ -140,7 +141,7 @@ export const useMap = () => {
     const source = layer.getSource();
     modify.current = new Modify({ source: source });
 
-    source.forEachFeature(function (feature) {
+    source.forEachFeature((feature) => {
       let style = new Style({
         stroke: new Stroke({
           color: "#4589A9",
@@ -160,5 +161,56 @@ export const useMap = () => {
     });
   };
 
-  return { drawGeometry, cancelInteraction, editFeatures, cancelEdit };
+  const renderGeojson = () => {
+    const geojsonLayer = new VectorLayer({
+      id: "geojsonLayer",
+      source: new VectorSource({
+        features: new GeoJSON().readFeatures(data),
+      }),
+    });
+
+    map.addLayer(geojsonLayer);
+  };
+
+  const removeGeojson = () => {
+    let layer;
+    map.getAllLayers().forEach((lyr) => {
+      if (lyr.get("id") === "geojsonLayer") {
+        layer = lyr;
+      }
+    });
+
+    if (!layer) return;
+
+    map.removeLayer(layer);
+  };
+
+  const exportGeojson = () => {
+    let features = [];
+
+    map.getAllLayers().forEach((layer) => {
+      if (layer.get("id") !== BASE_LAYER_ID) {
+        let source = layer.getSource();
+        source.forEachFeature((feature) => {
+          features.push(feature);
+        });
+      }
+    });
+
+    let geojson = new GeoJSON();
+
+    let finalObject = geojson.writeFeaturesObject(features);
+
+    console.log(finalObject);
+  };
+
+  return {
+    drawGeometry,
+    cancelInteraction,
+    editFeatures,
+    cancelEdit,
+    renderGeojson,
+    removeGeojson,
+    exportGeojson,
+  };
 };
