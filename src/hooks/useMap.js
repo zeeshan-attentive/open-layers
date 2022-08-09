@@ -11,14 +11,8 @@ import {
   GEOMETRY_TYPE_STRING,
   GOOGLE_IMAGERY_SATELLITE,
 } from "../Constants";
-import {
-  Draw,
-  Modify,
-  // Select,
-  Snap,
-  // defaults as defaultInteractions,
-} from "ol/interaction";
-import { Style, Stroke } from "ol/style";
+import { Draw, Modify, Snap } from "ol/interaction";
+import { Style, Stroke, Circle, Fill } from "ol/style";
 
 export const useMap = () => {
   const [map, setMap] = useState();
@@ -32,16 +26,7 @@ export const useMap = () => {
       source: new XYZ({ url: GOOGLE_IMAGERY_SATELLITE }),
     });
 
-    // const select = new Select({
-    //   wrapX: false,
-    // });
-
-    // const modify = new Modify({
-    //   features: select.getFeatures(),
-    // });
-
     const olMap = new OlMap({
-      // interactions: defaultInteractions().extend([select, modify]),
       target: "map",
       layers: [rasterlayer],
       view: new View({ center: [0, 0], zoom: 3, maxZoom: 24 }),
@@ -122,6 +107,15 @@ export const useMap = () => {
           width: 2,
           lineDash: [6],
         }),
+        image: new Circle({
+          radius: 7,
+          fill: new Fill({ color: "rgba(255,255,255,0.4)" }),
+          stroke: new Stroke({
+            color: [255, 0, 0],
+            width: 2,
+            lineDash: [3],
+          }),
+        }),
       });
 
       feature.setStyle(style);
@@ -151,6 +145,14 @@ export const useMap = () => {
         stroke: new Stroke({
           color: "#4589A9",
           width: 1.2,
+        }),
+        image: new Circle({
+          radius: 7,
+          fill: new Fill({ color: "rgba(255,255,255,0.4)" }),
+          stroke: new Stroke({
+            color: "rgba(69, 137, 169)",
+            width: 2,
+          }),
         }),
       });
 
