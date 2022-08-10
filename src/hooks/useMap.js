@@ -11,7 +11,14 @@ import {
   GEOMETRY_TYPE_STRING,
   GOOGLE_IMAGERY_SATELLITE,
 } from "../Constants";
-import { Draw, Modify, Snap } from "ol/interaction";
+import {
+  Draw,
+  Modify,
+  Select,
+  Snap,
+  Translate,
+  defaults as defaultInteractions,
+} from "ol/interaction";
 import { Style, Stroke, Circle, Fill } from "ol/style";
 import GeoJSON from "ol/format/GeoJSON";
 import data from "../files/random.json";
@@ -28,7 +35,14 @@ export const useMap = () => {
       source: new XYZ({ url: GOOGLE_IMAGERY_SATELLITE }),
     });
 
+    const select = new Select();
+
+    const translate = new Translate({
+      features: select.getFeatures(),
+    });
+
     const olMap = new OlMap({
+      interactions: defaultInteractions().extend([select, translate]),
       target: "map",
       layers: [rasterlayer],
       view: new View({ center: [0, 0], zoom: 3, maxZoom: 24 }),
