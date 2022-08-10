@@ -58,7 +58,7 @@ const Toolbar = () => {
         setPopupFlag={setPopupFlag}
         popupFlag={popupFlag}
         image={
-          "https://cdn.icon-icons.com/icons2/1875/PNG/512/shapepolygon_120487.png"
+          "https://d338t8kmirgyke.cloudfront.net/icons/icon_pngs/000/000/507/original/vector-patch-polygon.png"
         }
       />
       <DrawTool
