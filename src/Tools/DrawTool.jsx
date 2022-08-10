@@ -24,7 +24,7 @@ const DrawTool = ({
         className="draw-tool"
         src={image}
         alt=""
-        style={{ width: "20px", height: "20px" }}
+        style={{ width: "15px", height: "15px" }}
       />
     </div>
   );

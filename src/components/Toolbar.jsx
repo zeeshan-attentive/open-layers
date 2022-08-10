@@ -57,9 +57,7 @@ const Toolbar = () => {
         geomType={GEOMETRY_TYPE.POLYGON}
         setPopupFlag={setPopupFlag}
         popupFlag={popupFlag}
-        image={
-          "https://d338t8kmirgyke.cloudfront.net/icons/icon_pngs/000/000/507/original/vector-patch-polygon.png"
-        }
+        image={"https://cdn-icons-png.flaticon.com/512/2708/2708406.png"}
       />
       <DrawTool
         setCancelBox={setCancelBox3}
@@ -73,40 +71,66 @@ const Toolbar = () => {
       <div className="cancel-box" style={{ display: cancelBox1 }}>
         <span
           onClick={() => handleCancel(GEOMETRY_TYPE.LINESTRING, 1)}
-          style={{ marginRight: "10px" }}
+          className="cancel-box-div"
+          style={{ borderRight: "1px solid rgb(72, 78, 81)" }}
         >
           Cancel
         </span>
-        <span onClick={() => handleEdit(GEOMETRY_TYPE.LINESTRING)}>Edit</span>
+        <span
+          onClick={() => handleEdit(GEOMETRY_TYPE.LINESTRING)}
+          className="cancel-box-div"
+          style={{ borderRadius: "0px 5px 5px 0px" }}
+        >
+          Edit
+        </span>
       </div>
       <div className="cancel-box1" style={{ display: cancelBox2 }}>
         <span
           onClick={() => handleCancel(GEOMETRY_TYPE.POLYGON, 2)}
-          style={{ marginRight: "10px" }}
+          className="cancel-box-div"
+          style={{ borderRight: "1px solid rgb(72, 78, 81)" }}
         >
           Cancel
         </span>
-        <span onClick={() => handleEdit(GEOMETRY_TYPE.POLYGON, 3)}>Edit</span>
+        <span
+          onClick={() => handleEdit(GEOMETRY_TYPE.POLYGON, 3)}
+          className="cancel-box-div"
+          style={{ borderRadius: "0px 5px 5px 0px" }}
+        >
+          Edit
+        </span>
       </div>
       <div className="cancel-box2" style={{ display: cancelBox3 }}>
         <span
           onClick={() => handleCancel(GEOMETRY_TYPE.POINT)}
-          style={{ marginRight: "10px" }}
+          className="cancel-box-div"
+          style={{ borderRight: "1px solid rgb(72, 78, 81)" }}
         >
           Cancel
         </span>
-        <span onClick={() => handleEdit(GEOMETRY_TYPE.POINT)}>Edit</span>
+        <span
+          onClick={() => handleEdit(GEOMETRY_TYPE.POINT)}
+          className="cancel-box-div"
+          style={{ borderRadius: "0px 5px 5px 0px" }}
+        >
+          Edit
+        </span>
       </div>
       <div className="import-button">
-        <button
+        <img
           onClick={handleImport}
-          style={{ cursor: "pointer", marginBottom: "10px" }}
-        >
-          Import
-        </button>
-        <button style={{ cursor: "pointer" }} onClick={handleExport}>
-          Export
-        </button>
+          className="draw-tool"
+          src="https://cdn-icons.flaticon.com/png/512/3524/premium/3524338.png?token=exp=1660130409~hmac=1246130d21c1e8db7dbd22750a90bbee"
+          alt=""
+          style={{ width: "15px", height: "15px" }}
+        />
+        <img
+          onClick={handleExport}
+          className="draw-tool"
+          src="https://cdn-icons.flaticon.com/png/512/3524/premium/3524363.png?token=exp=1660130594~hmac=caf931f51e03ab4a349fc5e5966b91a7"
+          alt=""
+          style={{ width: "15px", height: "15px" }}
+        />
       </div>
     </div>
   );
