@@ -104,7 +104,9 @@ const Toolbar = () => {
         >
           Import
         </button>
-        <button onClick={handleExport}>Export</button>
+        <button style={{ cursor: "pointer" }} onClick={handleExport}>
+          Export
+        </button>
       </div>
     </div>
   );
