@@ -84,7 +84,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0px;
-  width: 31px;
+  width: 36px;
   position: absolute;
   left: 15px;
   top: 20px;
@@ -92,8 +92,7 @@ body {
 
 .ol-zoom-in,
 .ol-zoom-out {
-  padding-bottom: 3px;
   border: none;
-  font-size: 20px;
+  font-size: 22px;
   cursor: pointer;
 }

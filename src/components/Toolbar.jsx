@@ -124,16 +124,16 @@ const Toolbar = () => {
         <img
           onClick={handleImport}
           className="draw-tool"
-          src="https://cdn-icons.flaticon.com/png/512/3524/premium/3524338.png?token=exp=1660130409~hmac=1246130d21c1e8db7dbd22750a90bbee"
+          src="https://cdn-icons-png.flaticon.com/512/151/151901.png"
           alt=""
-          style={{ width: "15px", height: "15px" }}
+          style={{ width: "20px", height: "20px" }}
         />
         <img
           onClick={handleExport}
           className="draw-tool"
-          src="https://cdn-icons.flaticon.com/png/512/3524/premium/3524363.png?token=exp=1660130594~hmac=caf931f51e03ab4a349fc5e5966b91a7"
+          src="https://cdn-icons-png.flaticon.com/512/151/151900.png"
           alt=""
-          style={{ width: "15px", height: "15px" }}
+          style={{ width: "20px", height: "20px" }}
         />
       </div>
     </div>

@@ -23,7 +23,7 @@ const DrawTool = ({ geomType, image, setCancelBox }) => {
         className="draw-tool"
         src={image}
         alt=""
-        style={{ width: "15px", height: "15px" }}
+        style={{ width: "20px", height: "20px" }}
       />
     </div>
   );
