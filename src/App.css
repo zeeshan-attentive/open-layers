@@ -14,7 +14,7 @@ body {
   flex-direction: column;
   z-index: 1000;
   left: 15px;
-  top: 100px;
+  top: 85px;
   background-color: rgb(239, 239, 239);
   position: absolute;
   padding: 7px 3px;
@@ -92,7 +92,7 @@ body {
 
 .ol-zoom-in,
 .ol-zoom-out {
-  padding: 5px 0px;
+  padding-bottom: 3px;
   border: none;
   font-size: 20px;
   cursor: pointer;

@@ -1,20 +1,19 @@
 import React, { useContext } from "react";
 import { MapContext } from "../components/MapComponent";
 
-const DrawTool = ({
-  geomType,
-  image,
-  setCancelBox,
-  setPopupFlag,
-  popupFlag,
-}) => {
+const DrawTool = ({ geomType, image, setCancelBox }) => {
   const map = useContext(MapContext);
 
   const handleClick = () => {
-    if (!popupFlag) {
-      setPopupFlag(true);
+    if (geomType === 1) {
       map.drawGeometry(geomType);
-      setCancelBox("block");
+      setCancelBox({ box1: "block", box2: "none", box3: "none" });
+    } else if (geomType === 2) {
+      map.drawGeometry(geomType);
+      setCancelBox({ box1: "none", box2: "block", box3: "none" });
+    } else {
+      map.drawGeometry(geomType);
+      setCancelBox({ box1: "none", box2: "none", box3: "block" });
     }
   };
 
