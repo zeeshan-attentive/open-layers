@@ -88,6 +88,7 @@ export const useMap = () => {
     });
 
     draw.current.on("drawend", (e) => {
+      // getLayersForView();
       // console.log(e);
     });
 
@@ -218,6 +219,57 @@ export const useMap = () => {
     console.log(finalObject);
   };
 
+  const hideAllLayers = () => {
+    map.getAllLayers().forEach((lyr) => {
+      if (lyr.get("id") !== BASE_LAYER_ID) {
+        lyr.setVisible(!lyr.getVisible());
+      }
+    });
+  };
+
+  const getLayersForView = () => {
+    if (!map) return;
+
+    const all = [];
+
+    map.getAllLayers().forEach((lyr) => {
+      if (lyr.get("id") !== BASE_LAYER_ID) {
+        all.push(lyr);
+      }
+    });
+    // console.log(all);
+
+    return all;
+  };
+
+  const zoomToLayer = (layer) => {
+    let source = layer.getSource();
+    map.getView().fit(source.getExtent(), map.getSize());
+  };
+
+  const removeLayer = (layer) => {
+    map.removeLayer(layer);
+  };
+
+  const hideOneLayer = (layer) => {
+    layer.setVisible(!layer.getVisible());
+  };
+
+  const exportLayerGeojson = (layer) => {
+    let features = [];
+
+    let source = layer.getSource();
+    source.forEachFeature((feature) => {
+      features.push(feature);
+    });
+
+    let geojson = new GeoJSON();
+
+    let finalObject = geojson.writeFeaturesObject(features);
+
+    console.log(finalObject);
+  };
+
   return {
     drawGeometry,
     cancelInteraction,
@@ -226,5 +278,11 @@ export const useMap = () => {
     renderGeojson,
     removeGeojson,
     exportGeojson,
+    hideAllLayers,
+    getLayersForView,
+    zoomToLayer,
+    removeLayer,
+    hideOneLayer,
+    exportLayerGeojson,
   };
 };

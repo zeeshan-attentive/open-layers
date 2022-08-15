@@ -1,5 +1,6 @@
 import React from "react";
 import { useMap } from "../hooks/useMap";
+import InformationComponent from "./InformationComponent";
 import Toolbar from "./Toolbar";
 
 export const MapContext = React.createContext();
@@ -11,6 +12,7 @@ const MapComponent = () => {
     <MapContext.Provider value={map}>
       <div id="map" className="map-container">
         <Toolbar />
+        <InformationComponent />
       </div>
     </MapContext.Provider>
   );
