@@ -88,7 +88,6 @@ export const useMap = () => {
     });
 
     draw.current.on("drawend", (e) => {
-      // getLayersForView();
       // console.log(e);
     });
 
@@ -162,6 +161,7 @@ export const useMap = () => {
           color: "#4589A9",
           width: 1.2,
         }),
+        fill: new Fill({ color: `rgba(255,255,255,0.3)` }),
         image: new Circle({
           radius: 7,
           fill: new Fill({ color: "rgba(255,255,255,0.4)" }),
@@ -237,7 +237,6 @@ export const useMap = () => {
         all.push(lyr);
       }
     });
-    // console.log(all);
 
     return all;
   };
@@ -270,6 +269,30 @@ export const useMap = () => {
     console.log(finalObject);
   };
 
+  const changeStyle = (layer, width, color, opacity) => {
+    const source = layer.getSource();
+
+    source.forEachFeature((feature) => {
+      let style = new Style({
+        stroke: new Stroke({
+          color: color,
+          width: width,
+        }),
+        fill: new Fill({ color: `rgba(255,255,255,${opacity})` }),
+        image: new Circle({
+          radius: width,
+          fill: new Fill({ color: "rgba(255,255,255,0.4)" }),
+          stroke: new Stroke({
+            color: color,
+            width: width,
+          }),
+        }),
+      });
+
+      feature.setStyle(style);
+    });
+  };
+
   return {
     drawGeometry,
     cancelInteraction,
@@ -284,5 +307,6 @@ export const useMap = () => {
     removeLayer,
     hideOneLayer,
     exportLayerGeojson,
+    changeStyle,
   };
 };
