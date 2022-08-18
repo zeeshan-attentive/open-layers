@@ -32,7 +32,7 @@ body {
   cursor: pointer;
   position: absolute;
   left: 35px;
-  top: 10px;
+  top: 15px;
   color: white;
   font-size: 12px;
 }
@@ -51,7 +51,7 @@ body {
   cursor: pointer;
   position: absolute;
   left: 35px;
-  top: 50px;
+  top: 52px;
   color: white;
   font-size: 12px;
 }
@@ -60,7 +60,7 @@ body {
   cursor: pointer;
   position: absolute;
   left: 35px;
-  top: 90px;
+  top: 88px;
   font-size: 12px;
   color: white;
 }
@@ -162,7 +162,7 @@ body {
   width: 25px;
   border: none;
   cursor: pointer;
-  background-color: #428dd7;
+  /* background-color: #428dd7; */
 }
 
 .show-all-btn:hover {
@@ -184,5 +184,5 @@ body {
 }
 
 .information-layer-heading {
-  margin: 10px 0px 0px 5px;
+  margin: 20px 0px 0px 5px;
 }

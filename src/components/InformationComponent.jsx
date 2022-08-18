@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MapContext } from "./MapComponent";
 import Slider from "@mui/material/Slider";
 import Modal from "@mui/material/Modal";
@@ -10,14 +10,22 @@ const InformationComponent = () => {
 
   const [allLayers, setAllLayers] = useState([]);
   const [lyr, setLyr] = useState();
-  const [color, setColor] = useState("#aabbcc");
-  const [width, setWidth] = useState(2);
-  const [opacity, setOpacity] = useState(0.3);
-  const [img1, setImg1] = useState(false);
+  const [color, setColor] = useState({
+    0: "#428dd7",
+    1: "#428dd7",
+    2: "#428dd7",
+  });
+  const [width, setWidth] = useState({});
+  const [opacity, setOpacity] = useState({
+    0: 0.3,
+    1: 0.3,
+    2: 0.3,
+  });
+  const [view, setView] = useState(false);
   const [open, setOpen] = useState(false);
+  const [index, setIndex] = useState();
 
-  const handleOpen = (layer) => {
-    setLyr(layer);
+  const handleOpen = () => {
     setOpen(true);
   };
 
@@ -28,7 +36,7 @@ const InformationComponent = () => {
   };
 
   const handleLayers = () => {
-    setImg1(!img1);
+    setView(!view);
     useMap.hideAllLayers();
   };
 
@@ -49,9 +57,15 @@ const InformationComponent = () => {
     useMap.exportLayerGeojson(layer);
   };
 
-  const handleStyle = (lyr, width, color, opacity) => {
-    useMap.changeStyle(lyr, width, color, opacity);
-  };
+  useEffect(() => {
+    if (!lyr) return;
+
+    const handleStyle = (lyr, width, color, opacity) => {
+      useMap.changeStyle(lyr, width, color, opacity);
+    };
+
+    handleStyle(lyr, width[index], color[index], opacity[index]);
+  }, [lyr, width, color, opacity, index, useMap]);
 
   const style = {
     position: "absolute",
@@ -59,7 +73,6 @@ const InformationComponent = () => {
     right: "300px",
     width: 200,
     bgcolor: "background.paper",
-    border: "2px solid #000",
     boxShadow: 24,
     p: 3,
   };
@@ -70,7 +83,7 @@ const InformationComponent = () => {
         <img
           className="information-all-checkbox"
           src={
-            img1
+            view
               ? "https://visualpharm.com/assets/691/Hide-595b40b85ba036ed117dd526.svg"
               : "https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/eye-24-1024.png"
           }
@@ -89,8 +102,13 @@ const InformationComponent = () => {
                 <div key={i}>
                   <div className="information-layer-div">
                     <button
+                      style={{ backgroundColor: color[i] || "#428dd7" }}
                       className="open-modal-btn"
-                      onClick={() => handleOpen(e)}
+                      onClick={() => {
+                        setIndex(i);
+                        setLyr(e);
+                        handleOpen();
+                      }}
                     ></button>
                     <p style={{ marginTop: "10px", marginBottom: "10px" }}>
                       Layer {i + 1}:
@@ -135,11 +153,9 @@ const InformationComponent = () => {
                         <div style={{ fontSize: "16px" }}>
                           <p style={{ marginTop: "5px" }}>Fill and Outline:</p>
                           <HexColorPicker
-                            color={color}
+                            color={color[index] || "#428dd7"}
                             onChange={(value) => {
-                              setLyr(lyr);
-                              setColor(value);
-                              handleStyle(lyr, width, color, opacity);
+                              setColor({ ...color, [index]: value });
                             }}
                           />
                           <p className="information-layer-heading">
@@ -147,9 +163,7 @@ const InformationComponent = () => {
                           </p>
                           <Slider
                             onChange={(event, value) => {
-                              setLyr(lyr);
-                              setWidth(value);
-                              handleStyle(lyr, width, color, opacity);
+                              setWidth({ ...width, [index]: value });
                             }}
                             size="small"
                             step={1}
@@ -162,9 +176,7 @@ const InformationComponent = () => {
                           <p className="information-layer-heading">Opacity:</p>
                           <Slider
                             onChange={(event, value) => {
-                              setLyr(lyr);
-                              setOpacity(value);
-                              handleStyle(lyr, width, color, opacity);
+                              setOpacity({ ...opacity, [index]: value });
                             }}
                             size="small"
                             step={0.1}

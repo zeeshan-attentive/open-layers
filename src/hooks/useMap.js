@@ -17,7 +17,7 @@ import {
   Snap,
   // Select,
   // Translate,
-  // defaults as defaultInteractions,
+  defaults as defaultInteractions,
 } from "ol/interaction";
 import { Style, Stroke, Circle, Fill } from "ol/style";
 import GeoJSON from "ol/format/GeoJSON";
@@ -47,6 +47,7 @@ export const useMap = () => {
       layers: [rasterlayer],
       view: new View({ center: [0, 0], zoom: 3, maxZoom: 24 }),
       controls: defaults({ attribution: false, zoom: true }),
+      interactions: defaultInteractions({ doubleClickZoom: false }),
     });
 
     setMap(olMap);
@@ -85,10 +86,25 @@ export const useMap = () => {
     draw.current = new Draw({
       source: source,
       type: GEOMETRY_TYPE_STRING[geomType],
+      style: new Style({
+        stroke: new Stroke({
+          color: "#4589A9",
+          width: 3,
+        }),
+        fill: new Fill({ color: `rgba(255,255,255,0.3)` }),
+        image: new Circle({
+          radius: 3,
+          fill: new Fill({ color: "rgba(255,255,255,0.3)" }),
+          stroke: new Stroke({
+            color: "rgba(69, 137, 169)",
+            width: 3,
+          }),
+        }),
+      }),
     });
 
     draw.current.on("drawend", (e) => {
-      // console.log(e);
+      cancelInteraction();
     });
 
     map.addInteraction(draw.current);
@@ -118,16 +134,16 @@ export const useMap = () => {
       let style = new Style({
         stroke: new Stroke({
           color: "#FF5733",
-          width: 2,
+          width: 3,
           lineDash: [6],
         }),
-        fill: new Fill({ color: "rgba(255,255,255,0.4)" }),
+        fill: new Fill({ color: "rgba(255,255,255,0.3)" }),
         image: new Circle({
-          radius: 7,
-          fill: new Fill({ color: "rgba(255,255,255,0.4)" }),
+          radius: 3,
+          fill: new Fill({ color: "rgba(255,255,255,0.3)" }),
           stroke: new Stroke({
             color: [255, 0, 0],
-            width: 2,
+            width: 3,
             lineDash: [3],
           }),
         }),
@@ -159,15 +175,15 @@ export const useMap = () => {
       let style = new Style({
         stroke: new Stroke({
           color: "#4589A9",
-          width: 1.2,
+          width: 3,
         }),
         fill: new Fill({ color: `rgba(255,255,255,0.3)` }),
         image: new Circle({
-          radius: 7,
-          fill: new Fill({ color: "rgba(255,255,255,0.4)" }),
+          radius: 3,
+          fill: new Fill({ color: "rgba(255,255,255,0.3)" }),
           stroke: new Stroke({
             color: "rgba(69, 137, 169)",
-            width: 2,
+            width: 3,
           }),
         }),
       });
@@ -271,6 +287,11 @@ export const useMap = () => {
 
   const changeStyle = (layer, width, color, opacity) => {
     const source = layer.getSource();
+    let radius;
+
+    if (layer.get("id") === 3) {
+      radius = width;
+    }
 
     source.forEachFeature((feature) => {
       let style = new Style({
@@ -280,11 +301,11 @@ export const useMap = () => {
         }),
         fill: new Fill({ color: `rgba(255,255,255,${opacity})` }),
         image: new Circle({
-          radius: width,
-          fill: new Fill({ color: "rgba(255,255,255,0.4)" }),
+          radius: radius || 3,
+          fill: new Fill({ color: `rgba(255,255,255,${opacity})` }),
           stroke: new Stroke({
             color: color,
-            width: width,
+            width: 3,
           }),
         }),
       });

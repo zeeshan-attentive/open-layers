@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { GEOMETRY_TYPE } from "../Constants";
 import DrawTool from "../Tools/DrawTool";
 import { MapContext } from "./MapComponent";
@@ -9,7 +9,9 @@ const Toolbar = () => {
     box2: "none",
     box3: "none",
   });
-  const [importToggle, setImportToggle] = useState(false);
+  // const [importToggle, setImportToggle] = useState(false);
+  const inputFile = useRef(null);
+  // console.log(inputFile)
 
   const map = useContext(MapContext);
 
@@ -37,13 +39,14 @@ const Toolbar = () => {
 
     map.cancelInteraction();
 
-    if (!importToggle) {
-      setImportToggle(true);
-      map.renderGeojson();
-    } else {
-      setImportToggle(false);
-      map.removeGeojson();
-    }
+    // if (!importToggle) {
+    // setImportToggle(true);
+    // map.renderGeojson();
+    inputFile.current.click();
+    // } else {
+    // setImportToggle(false);
+    // map.removeGeojson();
+    // }
   };
 
   const handleExport = () => {
@@ -127,6 +130,12 @@ const Toolbar = () => {
           src="https://cdn-icons-png.flaticon.com/512/151/151901.png"
           alt=""
           style={{ width: "20px", height: "20px" }}
+        />
+        <input
+          type="file"
+          id="file"
+          ref={inputFile}
+          style={{ display: "none" }}
         />
         <img
           onClick={handleExport}
