@@ -6,10 +6,15 @@ import Box from "@mui/material/Box";
 import { HexColorPicker } from "react-colorful";
 
 const InformationComponent = () => {
+  // Rename useMap to map
   const useMap = useContext(MapContext);
 
   const [allLayers, setAllLayers] = useState([]);
   const [lyr, setLyr] = useState();
+  th;
+
+  // Don't keep these i.e., color, width and opaicty states
+  // Directly update the layer style
   const [color, setColor] = useState({
     0: "#428dd7",
     1: "#428dd7",
@@ -21,20 +26,29 @@ const InformationComponent = () => {
     1: 0.3,
     2: 0.3,
   });
+
+  // Rename view to visible
   const [view, setView] = useState(false);
+
+  // Rename it to modalVisible
   const [open, setOpen] = useState(false);
+
   const [index, setIndex] = useState();
 
+  // Rename it to showModal
   const handleOpen = () => {
     setOpen(true);
   };
 
+  // Rename it to closeModal
   const handleClose = () => setOpen(false);
 
+  // Rename to refreshAllLayers
   const showAllLayers = () => {
     setAllLayers(useMap.getLayersForView());
   };
 
+  // Rename to hideAllLayers
   const handleLayers = () => {
     setView(!view);
     useMap.hideAllLayers();
@@ -57,6 +71,8 @@ const InformationComponent = () => {
     useMap.exportLayerGeojson(layer);
   };
 
+  // Don't use effect
+  // Directly update layer style from Modal
   useEffect(() => {
     if (!lyr) return;
 
@@ -100,6 +116,7 @@ const InformationComponent = () => {
           ? allLayers.map((e, i) => {
               return (
                 <div key={i}>
+                  {/* Remove outer div and add key={i} to inner div */}
                   <div className="information-layer-div">
                     <button
                       style={{ backgroundColor: color[i] || "#428dd7" }}
@@ -141,6 +158,10 @@ const InformationComponent = () => {
                     </div>
                   </div>
                   <div>
+                    {/* Remove this div */}
+                    {/* Make a new component for Modal */}
+                    {/* Add the new modal component as the last child of above div */}
+                    {/* Pass all required info as props to the component */}
                     <Modal
                       className="modal-div"
                       open={open}

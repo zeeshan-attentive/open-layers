@@ -4,6 +4,7 @@ import DrawTool from "../Tools/DrawTool";
 import { MapContext } from "./MapComponent";
 
 const Toolbar = () => {
+  // TODO: Remove this from here because cancel box code will be shifted to the tool itself
   const [cancelBox, setCancelBox] = useState({
     box1: "none",
     box2: "none",
@@ -15,6 +16,7 @@ const Toolbar = () => {
 
   const map = useContext(MapContext);
 
+  // TODO: Remove this code from here
   const handleCancel = (type) => {
     setCancelBox({
       box1: "none",
@@ -26,6 +28,7 @@ const Toolbar = () => {
     map.cancelEdit(type);
   };
 
+  // TODO: Remove this code from here
   const handleEdit = (editGeomType) => {
     map.editFeatures(editGeomType);
   };
@@ -75,6 +78,11 @@ const Toolbar = () => {
           "https://icons-for-free.com/iconfiles/png/512/map+point+icon-1320073183505881976.png"
         }
       />
+
+      {/* TODO:
+        Don't repeat you code again and again.
+        Move the code inside draw tool itself.
+       */}
       <div className="cancel-box" style={{ display: cancelBox.box1 }}>
         <span
           onClick={() => handleCancel(GEOMETRY_TYPE.LINESTRING, 1)}

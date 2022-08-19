@@ -70,8 +70,10 @@ export const useMap = () => {
   };
 
   const drawGeometry = (geomType) => {
+    // Use cancelInteraction
     draw.current && map.removeInteraction(draw.current);
 
+    // TODO: Make a new function getLayerById and use that
     let layer;
     map.getAllLayers().forEach((lyr) => {
       if (lyr.get("id") === geomType) {
@@ -86,6 +88,7 @@ export const useMap = () => {
     draw.current = new Draw({
       source: source,
       type: GEOMETRY_TYPE_STRING[geomType],
+      // TODO: Make a new OlStyles.js file and import the style from it
       style: new Style({
         stroke: new Stroke({
           color: "#4589A9",
@@ -109,6 +112,7 @@ export const useMap = () => {
 
     map.addInteraction(draw.current);
 
+    // Remove this snap interaction
     snap.current = new Snap({ source: source });
     map.addInteraction(snap.current);
   };
@@ -118,6 +122,7 @@ export const useMap = () => {
   };
 
   const editFeatures = (type) => {
+    // TODO: Make a new function getLayerById and use that
     let layer;
     map.getAllLayers().forEach((lyr) => {
       if (lyr.get("id") === type) {
@@ -131,6 +136,7 @@ export const useMap = () => {
     modify.current = new Modify({ source: source });
 
     source.forEachFeature((feature) => {
+      // TODO: Make a new OlStyles.js file and import the style from it
       let style = new Style({
         stroke: new Stroke({
           color: "#FF5733",
@@ -152,13 +158,17 @@ export const useMap = () => {
       feature.setStyle(style);
     });
 
+    // TODO: use cancelInteraction
     map.removeInteraction(draw.current);
+
     map.addInteraction(modify.current);
   };
 
   const cancelEdit = (type) => {
+    // TODO: use cancelInteraction
     map.removeInteraction(modify.current);
 
+    // TODO: Make a new function getLayerById and use that
     let layer;
     map.getAllLayers().forEach((lyr) => {
       if (lyr.get("id") === type) {
@@ -172,6 +182,7 @@ export const useMap = () => {
     modify.current = new Modify({ source: source });
 
     source.forEachFeature((feature) => {
+      // TODO: Make a new OlStyles.js file and import the style from it
       let style = new Style({
         stroke: new Stroke({
           color: "#4589A9",
@@ -194,6 +205,7 @@ export const useMap = () => {
 
   const renderGeojson = () => {
     const geojsonLayer = new VectorLayer({
+      // Don't hardcode id, use constant
       id: "geojsonLayer",
       source: new VectorSource({
         features: new GeoJSON().readFeatures(data),
@@ -204,8 +216,10 @@ export const useMap = () => {
   };
 
   const removeGeojson = () => {
+    // TODO: Make a new function getLayerById and use that
     let layer;
     map.getAllLayers().forEach((lyr) => {
+      // Don't hardcode id, use constant
       if (lyr.get("id") === "geojsonLayer") {
         layer = lyr;
       }
@@ -289,11 +303,14 @@ export const useMap = () => {
     const source = layer.getSource();
     let radius;
 
+    // Don't use magic numbers like 3
+    // Don't hardcode ids
     if (layer.get("id") === 3) {
       radius = width;
     }
 
     source.forEachFeature((feature) => {
+      // Import from OlStyles.js
       let style = new Style({
         stroke: new Stroke({
           color: color,

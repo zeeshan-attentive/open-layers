@@ -1,10 +1,13 @@
 import React, { useContext } from "react";
 import { MapContext } from "../components/MapComponent";
+import { GEOMETRY_TYPE } from "../Constants";
 
 const DrawTool = ({ geomType, image, setCancelBox }) => {
   const map = useContext(MapContext);
 
   const handleClick = () => {
+    // Don't hardcode types
+    // compare like this geomType === GEOMETRY_TYPE.LINESTRING
     if (geomType === 1) {
       map.drawGeometry(geomType);
       setCancelBox({ box1: "block", box2: "none", box3: "none" });
