@@ -6,12 +6,9 @@ import { MapContext } from "./MapComponent";
 const Toolbar = () => {
   const map = useContext(MapContext);
 
-  // const inputFile = useRef(null);
   const [importToggle, setImportToggle] = useState(false);
 
   const handleImport = () => {
-    // inputFile.current.click();
-
     if (!importToggle) {
       setImportToggle(true);
       map.renderGeojson();
@@ -49,12 +46,6 @@ const Toolbar = () => {
           alt=""
           style={{ width: "20px", height: "20px" }}
         />
-        {/* <input
-          type="file"
-          id="file"
-          ref={inputFile}
-          style={{ display: "none" }}
-        /> */}
         <img
           onClick={handleExport}
           className="draw-tool"

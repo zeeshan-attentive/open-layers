@@ -80,11 +80,11 @@ export const useMap = () => {
   };
 
   const cancelInteraction = (draw) => {
-    if (draw) map.removeInteraction(draw);
+    map.removeInteraction(draw);
   };
 
   const getLayerById = (geomType) => {
-    if(!map) return;
+    if (!map) return;
     let layer;
 
     map.getAllLayers().forEach((lyr) => {
@@ -114,6 +114,7 @@ export const useMap = () => {
 
   const cancelEdit = (geomType) => {
     cancelInteraction(modify.current);
+    cancelInteraction(draw.current);
 
     let layer = getLayerById(geomType);
     if (!layer) return;
@@ -128,7 +129,7 @@ export const useMap = () => {
   };
 
   const renderGeojson = () => {
-    map.cancelInteraction(draw.current);
+    if (draw.current) cancelInteraction(draw.current);
 
     const geojsonLayer = new VectorLayer({
       id: GEOJSON_LAYER_ID,
@@ -142,7 +143,6 @@ export const useMap = () => {
 
   const removeGeojson = () => {
     let layer = getLayerById(GEOJSON_LAYER_ID);
-
     if (!layer) return;
 
     map.removeLayer(layer);
@@ -227,15 +227,15 @@ export const useMap = () => {
       // Import from OlStyles.js
       let style = new Style({
         stroke: new Stroke({
-          color: color,
-          width: width,
+          color: color || "#428dd7",
+          width: width || 3,
         }),
-        fill: new Fill({ color: `rgba(255,255,255,${opacity})` }),
+        fill: new Fill({ color: `rgba(255,255,255,${opacity || 0.3})` }),
         image: new Circle({
           radius: radius || 3,
-          fill: new Fill({ color: `rgba(255,255,255,${opacity})` }),
+          fill: new Fill({ color: `rgba(255,255,255,${opacity || 0.3})` }),
           stroke: new Stroke({
-            color: color,
+            color: color || "#428dd7",
             width: 3,
           }),
         }),

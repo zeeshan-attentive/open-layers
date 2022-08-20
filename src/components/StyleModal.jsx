@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Slider from "@mui/material/Slider";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { HexColorPicker } from "react-colorful";
+import { MapContext } from "./MapComponent";
 
 const StyleModal = ({
   modalVisible,
@@ -10,11 +11,10 @@ const StyleModal = ({
   color,
   index,
   setColor,
-  setOpacity,
-  opacity,
-  width,
-  setWidth,
+  lyr,
 }) => {
+  const map = useContext(MapContext);
+
   const style = {
     position: "absolute",
     top: "130px",
@@ -24,6 +24,22 @@ const StyleModal = ({
     boxShadow: 24,
     p: 3,
   };
+
+  const [width, setWidth] = useState({});
+  const [opacity, setOpacity] = useState({});
+
+  // Don't use effect
+  // Directly update layer style from Modal
+
+  useEffect(() => {
+    if (!lyr) return;
+
+    const handleStyle = (lyr, width, color, opacity) => {
+      map.changeStyle(lyr, width, color, opacity);
+    };
+
+    handleStyle(lyr, width[index], color[index], opacity[index]);
+  }, [lyr, width, color, opacity, index, map]);
 
   return (
     <Modal
@@ -35,8 +51,8 @@ const StyleModal = ({
       BackdropProps={{ invisible: true }}
     >
       <Box sx={style}>
-        <div style={{ fontSize: "16px" }}>
-          <p style={{ marginTop: "5px" }}>Fill and Outline:</p>
+        <div>
+          <p className="hexcolor-heading">Fill and Outline:</p>
           <HexColorPicker
             color={color[index] || "#428dd7"}
             onChange={(value) => {

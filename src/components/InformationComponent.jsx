@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { MapContext } from "./MapComponent";
 import StyleModal from "./StyleModal";
 
@@ -7,22 +7,14 @@ const InformationComponent = () => {
 
   const [allLayers, setAllLayers] = useState([]);
   const [lyr, setLyr] = useState();
-  // Don't keep these i.e., color, width and opaicty states
-  // Directly update the layer style
-  const [color, setColor] = useState({
-    0: "#428dd7",
-    1: "#428dd7",
-    2: "#428dd7",
-  });
-  const [width, setWidth] = useState({});
-  const [opacity, setOpacity] = useState({
-    0: 0.3,
-    1: 0.3,
-    2: 0.3,
-  });
   const [visible, setVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+
+  // Don't keep these i.e., color, width and opaicty states
+  // Directly update the layer style
+
   const [index, setIndex] = useState();
+  const [color, setColor] = useState({});
 
   const showModal = () => {
     setModalVisible(true);
@@ -55,18 +47,6 @@ const InformationComponent = () => {
   const exportGeojson = (layer) => {
     map.exportLayerGeojson(layer);
   };
-
-  // Don't use effect
-  // Directly update layer style from Modal
-  useEffect(() => {
-    if (!lyr) return;
-
-    const handleStyle = (lyr, width, color, opacity) => {
-      map.changeStyle(lyr, width, color, opacity);
-    };
-
-    handleStyle(lyr, width[index], color[index], opacity[index]);
-  }, [lyr, width, color, opacity, index, map]);
 
   return (
     <div className="information-container">
@@ -133,10 +113,7 @@ const InformationComponent = () => {
                     color={color}
                     index={index}
                     setColor={setColor}
-                    setWidth={setWidth}
-                    width={width}
-                    setOpacity={setOpacity}
-                    opacity={opacity}
+                    lyr={lyr}
                   />
                 </div>
               );
