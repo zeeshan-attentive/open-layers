@@ -8,25 +8,20 @@ import { XYZ } from "ol/source";
 import { defaults } from "ol/control";
 import {
   BASE_LAYER_ID,
+  GEOJSON_LAYER_ID,
+  GEOMETRY_TYPE,
   GEOMETRY_TYPE_STRING,
   GOOGLE_IMAGERY_SATELLITE,
 } from "../Constants";
-import {
-  Draw,
-  Modify,
-  Snap,
-  // Select,
-  // Translate,
-  defaults as defaultInteractions,
-} from "ol/interaction";
+import { Draw, Modify, defaults as defaultInteractions } from "ol/interaction";
 import { Style, Stroke, Circle, Fill } from "ol/style";
 import GeoJSON from "ol/format/GeoJSON";
 import data from "../files/random.json";
+import { editStyle, mapStyle } from "../OlStyles";
 
 export const useMap = () => {
   const [map, setMap] = useState();
   const draw = useRef();
-  const snap = useRef();
   const modify = useRef();
 
   useEffect(() => {
@@ -35,14 +30,7 @@ export const useMap = () => {
       source: new XYZ({ url: GOOGLE_IMAGERY_SATELLITE }),
     });
 
-    // const select = new Select();
-
-    // const translate = new Translate({
-    //   features: select.getFeatures(),
-    // });
-
     const olMap = new OlMap({
-      // interactions: defaultInteractions().extend([select, translate]),
       target: "map",
       layers: [rasterlayer],
       view: new View({ center: [0, 0], zoom: 3, maxZoom: 24 }),
@@ -70,16 +58,9 @@ export const useMap = () => {
   };
 
   const drawGeometry = (geomType) => {
-    // Use cancelInteraction
-    draw.current && map.removeInteraction(draw.current);
+    draw.current && cancelInteraction(draw.current);
 
-    // TODO: Make a new function getLayerById and use that
-    let layer;
-    map.getAllLayers().forEach((lyr) => {
-      if (lyr.get("id") === geomType) {
-        layer = lyr;
-      }
-    });
+    let layer = getLayerById(geomType);
 
     if (!layer) layer = addVectorLayer(geomType);
 
@@ -88,125 +69,69 @@ export const useMap = () => {
     draw.current = new Draw({
       source: source,
       type: GEOMETRY_TYPE_STRING[geomType],
-      // TODO: Make a new OlStyles.js file and import the style from it
-      style: new Style({
-        stroke: new Stroke({
-          color: "#4589A9",
-          width: 3,
-        }),
-        fill: new Fill({ color: `rgba(255,255,255,0.3)` }),
-        image: new Circle({
-          radius: 3,
-          fill: new Fill({ color: "rgba(255,255,255,0.3)" }),
-          stroke: new Stroke({
-            color: "rgba(69, 137, 169)",
-            width: 3,
-          }),
-        }),
-      }),
+      style: mapStyle,
     });
 
-    draw.current.on("drawend", (e) => {
-      cancelInteraction();
+    draw.current.on("drawend", () => {
+      cancelInteraction(draw.current);
     });
 
     map.addInteraction(draw.current);
-
-    // Remove this snap interaction
-    snap.current = new Snap({ source: source });
-    map.addInteraction(snap.current);
   };
 
-  const cancelInteraction = () => {
-    map.removeInteraction(draw.current);
+  const cancelInteraction = (draw) => {
+    if (draw) map.removeInteraction(draw);
   };
 
-  const editFeatures = (type) => {
-    // TODO: Make a new function getLayerById and use that
+  const getLayerById = (geomType) => {
+    if(!map) return;
     let layer;
+
     map.getAllLayers().forEach((lyr) => {
-      if (lyr.get("id") === type) {
+      if (lyr.get("id") === geomType) {
         layer = lyr;
       }
     });
 
+    return layer;
+  };
+
+  const editFeatures = (geomType) => {
+    let layer = getLayerById(geomType);
     if (!layer) return;
 
     const source = layer.getSource();
     modify.current = new Modify({ source: source });
 
     source.forEachFeature((feature) => {
-      // TODO: Make a new OlStyles.js file and import the style from it
-      let style = new Style({
-        stroke: new Stroke({
-          color: "#FF5733",
-          width: 3,
-          lineDash: [6],
-        }),
-        fill: new Fill({ color: "rgba(255,255,255,0.3)" }),
-        image: new Circle({
-          radius: 3,
-          fill: new Fill({ color: "rgba(255,255,255,0.3)" }),
-          stroke: new Stroke({
-            color: [255, 0, 0],
-            width: 3,
-            lineDash: [3],
-          }),
-        }),
-      });
-
+      let style = editStyle;
       feature.setStyle(style);
     });
 
-    // TODO: use cancelInteraction
-    map.removeInteraction(draw.current);
-
+    cancelInteraction(draw.current);
     map.addInteraction(modify.current);
   };
 
-  const cancelEdit = (type) => {
-    // TODO: use cancelInteraction
-    map.removeInteraction(modify.current);
+  const cancelEdit = (geomType) => {
+    cancelInteraction(modify.current);
 
-    // TODO: Make a new function getLayerById and use that
-    let layer;
-    map.getAllLayers().forEach((lyr) => {
-      if (lyr.get("id") === type) {
-        layer = lyr;
-      }
-    });
-
+    let layer = getLayerById(geomType);
     if (!layer) return;
 
     const source = layer.getSource();
     modify.current = new Modify({ source: source });
 
     source.forEachFeature((feature) => {
-      // TODO: Make a new OlStyles.js file and import the style from it
-      let style = new Style({
-        stroke: new Stroke({
-          color: "#4589A9",
-          width: 3,
-        }),
-        fill: new Fill({ color: `rgba(255,255,255,0.3)` }),
-        image: new Circle({
-          radius: 3,
-          fill: new Fill({ color: "rgba(255,255,255,0.3)" }),
-          stroke: new Stroke({
-            color: "rgba(69, 137, 169)",
-            width: 3,
-          }),
-        }),
-      });
-
+      let style = mapStyle;
       feature.setStyle(style);
     });
   };
 
   const renderGeojson = () => {
+    map.cancelInteraction(draw.current);
+
     const geojsonLayer = new VectorLayer({
-      // Don't hardcode id, use constant
-      id: "geojsonLayer",
+      id: GEOJSON_LAYER_ID,
       source: new VectorSource({
         features: new GeoJSON().readFeatures(data),
       }),
@@ -216,14 +141,7 @@ export const useMap = () => {
   };
 
   const removeGeojson = () => {
-    // TODO: Make a new function getLayerById and use that
-    let layer;
-    map.getAllLayers().forEach((lyr) => {
-      // Don't hardcode id, use constant
-      if (lyr.get("id") === "geojsonLayer") {
-        layer = lyr;
-      }
-    });
+    let layer = getLayerById(GEOJSON_LAYER_ID);
 
     if (!layer) return;
 
@@ -243,7 +161,6 @@ export const useMap = () => {
     });
 
     let geojson = new GeoJSON();
-
     let finalObject = geojson.writeFeaturesObject(features);
 
     console.log(finalObject);
@@ -293,7 +210,6 @@ export const useMap = () => {
     });
 
     let geojson = new GeoJSON();
-
     let finalObject = geojson.writeFeaturesObject(features);
 
     console.log(finalObject);
@@ -303,9 +219,7 @@ export const useMap = () => {
     const source = layer.getSource();
     let radius;
 
-    // Don't use magic numbers like 3
-    // Don't hardcode ids
-    if (layer.get("id") === 3) {
+    if (layer.get("id") === GEOMETRY_TYPE.POINT) {
       radius = width;
     }
 
