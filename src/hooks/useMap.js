@@ -17,7 +17,8 @@ import { Draw, Modify, defaults as defaultInteractions } from "ol/interaction";
 import { Style, Stroke, Circle, Fill } from "ol/style";
 import GeoJSON from "ol/format/GeoJSON";
 import data from "../files/random.json";
-import { editStyle, mapStyle } from "../OlStyles";
+import { editStyles, mapStyles } from "../OlStyles";
+import { asArray } from "ol/color";
 
 export const useMap = () => {
   const [map, setMap] = useState();
@@ -61,7 +62,6 @@ export const useMap = () => {
     draw.current && cancelInteraction(draw.current);
 
     let layer = getLayerById(geomType);
-
     if (!layer) layer = addVectorLayer(geomType);
 
     const source = layer.getSource();
@@ -69,7 +69,7 @@ export const useMap = () => {
     draw.current = new Draw({
       source: source,
       type: GEOMETRY_TYPE_STRING[geomType],
-      style: mapStyle,
+      style: mapStyles[GEOMETRY_TYPE_STRING[geomType]],
     });
 
     draw.current.on("drawend", () => {
@@ -103,13 +103,14 @@ export const useMap = () => {
     const source = layer.getSource();
     modify.current = new Modify({ source: source });
 
-    source.forEachFeature((feature) => {
-      let style = editStyle;
-      feature.setStyle(style);
-    });
+    setStyles(source, geomType);
 
     cancelInteraction(draw.current);
     map.addInteraction(modify.current);
+
+    source.forEachFeature((feature) => {
+      feature.setStyle(editStyles[GEOMETRY_TYPE_STRING[geomType]]);
+    });
   };
 
   const cancelEdit = (geomType) => {
@@ -122,9 +123,12 @@ export const useMap = () => {
     const source = layer.getSource();
     modify.current = new Modify({ source: source });
 
+    setStyles(source, geomType);
+  };
+
+  const setStyles = (source, geomType) => {
     source.forEachFeature((feature) => {
-      let style = mapStyle;
-      feature.setStyle(style);
+      feature.setStyle(mapStyles[GEOMETRY_TYPE_STRING[geomType]]);
     });
   };
 
@@ -215,33 +219,44 @@ export const useMap = () => {
     console.log(finalObject);
   };
 
+  const getOpacity = (col, opacity) => {
+    let color = asArray(col);
+    color[3] = opacity;
+    console.log(opacity);
+    return color;
+  };
+
   const changeStyle = (layer, width, color, opacity) => {
     const source = layer.getSource();
     let radius;
-
+    // console.log(opacity);
     if (layer.get("id") === GEOMETRY_TYPE.POINT) {
       radius = width;
     }
 
-    source.forEachFeature((feature) => {
-      // Import from OlStyles.js
-      let style = new Style({
-        stroke: new Stroke({
-          color: color || "#428dd7",
-          width: width || 3,
+    const styles = {
+      LineString: new Style({
+        stroke: new Stroke({ color: color || "#428dd7", width: width || 3 }),
+      }),
+      Polygon: new Style({
+        stroke: new Stroke({ color: color || "#428dd7", width: width || 3 }),
+        fill: new Fill({
+          color: color
+            ? getOpacity(color, opacity || 0.3)
+            : "rgb(66, 141, 215, 0.3)",
         }),
-        fill: new Fill({ color: `rgba(255,255,255,${opacity || 0.3})` }),
+      }),
+      Point: new Style({
         image: new Circle({
-          radius: radius || 3,
-          fill: new Fill({ color: `rgba(255,255,255,${opacity || 0.3})` }),
-          stroke: new Stroke({
-            color: color || "#428dd7",
-            width: 3,
-          }),
+          radius: radius || 6,
+          fill: new Fill({ color: [0, 0, 0, 0] }),
+          stroke: new Stroke({ color: color || "#428dd7", width: 3 }),
         }),
-      });
+      }),
+    };
 
-      feature.setStyle(style);
+    source.forEachFeature((feature) => {
+      feature.setStyle(styles[feature.getGeometry().getType()]);
     });
   };
 

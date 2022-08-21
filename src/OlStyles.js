@@ -1,35 +1,51 @@
 import { Style, Stroke, Circle, Fill } from "ol/style";
 
-export const mapStyle = new Style({
-  stroke: new Stroke({
-    color: "#4589A9",
-    width: 3,
+export const mapStyles = {
+  LineString: new Style({
+    stroke: new Stroke({ color: "rgb(66, 141, 215)", width: 3 }),
   }),
-  fill: new Fill({ color: `rgba(255,255,255,0.3)` }),
-  image: new Circle({
-    radius: 6,
-    fill: new Fill({ color: "rgba(255,255,255,0.3)" }),
-    stroke: new Stroke({
-      color: "rgba(69, 137, 169)",
-      width: 3,
+  Polygon: new Style({
+    stroke: new Stroke({ color: "rgb(66, 141, 215)", width: 3 }),
+    fill: new Fill({
+      color: "rgb(66, 141, 215, 0.2)",
     }),
   }),
-});
+  Point: new Style({
+    image: new Circle({
+      radius: 6,
+      fill: new Fill({ color: "rgb(66, 141, 215, 0.2)" }),
+      stroke: new Stroke({ color: "rgb(66, 141, 215)", width: 3 }),
+    }),
+  }),
+};
 
-export const editStyle = new Style({
-  stroke: new Stroke({
-    color: "#FF5733",
-    width: 3,
-    lineDash: [6],
-  }),
-  fill: new Fill({ color: "rgba(255,255,255,0.3)" }),
-  image: new Circle({
-    radius: 6,
-    fill: new Fill({ color: "rgba(255,255,255,0.3)" }),
+export const editStyles = {
+  LineString: new Style({
     stroke: new Stroke({
-      color: [255, 0, 0],
+      color: "rgb(255, 87, 51)",
       width: 3,
-      lineDash: [3],
+      lineDash: [7],
     }),
   }),
-});
+  Polygon: new Style({
+    stroke: new Stroke({
+      color: "rgb(255, 87, 51)",
+      width: 3,
+      lineDash: [7],
+    }),
+    fill: new Fill({
+      color: "rgb(255, 87, 51,0.2)",
+    }),
+  }),
+  Point: new Style({
+    image: new Circle({
+      radius: 6,
+      fill: new Fill({ color: "rgb(255, 87, 51,0.2)" }),
+      stroke: new Stroke({
+        color: "rgb(255, 87, 51)",
+        width: 3,
+        lineDash: [3],
+      }),
+    }),
+  }),
+};
