@@ -229,7 +229,7 @@ export const useMap = () => {
   const changeStyle = (layer, width, color, opacity) => {
     const source = layer.getSource();
     let radius;
-    // console.log(opacity);
+    
     if (layer.get("id") === GEOMETRY_TYPE.POINT) {
       radius = width;
     }
