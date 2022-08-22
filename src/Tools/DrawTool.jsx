@@ -19,15 +19,6 @@ const DrawTool = ({ geomType, image }) => {
     setCancelModal("block");
   };
 
-  const handleEdit = (editGeomType) => {
-    map.editFeatures(editGeomType);
-  };
-
-  const handleCancel = (geomType) => {
-    setCancelModal("none");
-    map.cancelEdit(geomType);
-  };
-
   return (
     <div>
       <img onClick={handleClick} className="draw-tool" src={image} alt="" />
@@ -36,13 +27,16 @@ const DrawTool = ({ geomType, image }) => {
         style={{ display: cancelModal, top: modalPosition }}
       >
         <span
-          onClick={() => handleCancel(geomType)}
+          onClick={() => {
+            setCancelModal("none");
+            map.cancelEdit(geomType);
+          }}
           className="cancel-box-div left"
         >
           Cancel
         </span>
         <span
-          onClick={() => handleEdit(geomType)}
+          onClick={() => map.editFeatures(geomType)}
           className="cancel-box-div right"
         >
           Edit

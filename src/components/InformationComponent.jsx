@@ -67,13 +67,13 @@ const InformationComponent = () => {
                       src="https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/eye-24-1024.png"
                       alt=""
                       onClick={() => map.hideOneLayer(e)}
-                      className="information-all-img"
+                      className="information-one-img"
                     />
                     <img
                       src="https://cdn-icons-png.flaticon.com/512/117/117453.png"
                       alt=""
                       onClick={() => map.zoomToLayer(e)}
-                      className="information-all-img"
+                      className="information-one-img"
                     />
                     <img
                       src="https://cdn-icons-png.flaticon.com/512/1345/1345874.png"
@@ -82,13 +82,13 @@ const InformationComponent = () => {
                         map.removeLayer(e);
                         setAllLayers(map.getLayersForView());
                       }}
-                      className="information-all-img"
+                      className="information-one-img"
                     />
                     <img
                       src="https://cdn-icons-png.flaticon.com/512/151/151900.png"
                       alt=""
                       onClick={() => map.exportLayerGeojson(e)}
-                      className="information-all-img"
+                      className="information-one-img"
                     />
                   </div>
                   <StyleModal

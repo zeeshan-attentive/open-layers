@@ -18,10 +18,6 @@ const Toolbar = () => {
     }
   };
 
-  const handleExport = () => {
-    map.exportGeojson();
-  };
-
   return (
     <div className="tools-div">
       <DrawTool
@@ -47,7 +43,7 @@ const Toolbar = () => {
           style={{ width: "20px", height: "20px" }}
         />
         <img
-          onClick={handleExport}
+          onClick={() => map.exportGeojson()}
           className="draw-tool"
           src="https://cdn-icons-png.flaticon.com/512/151/151900.png"
           alt=""
