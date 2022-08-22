@@ -55,7 +55,7 @@ export const useMap = () => {
     return vectorLayer;
   };
 
-  const drawGeometry = (geomType) => {
+  const drawGeometry = (geomType, options) => {
     draw.current && cancelInteraction(draw.current);
 
     let layer = getLayerById(geomType);
@@ -71,6 +71,7 @@ export const useMap = () => {
 
     draw.current.on("drawend", () => {
       cancelInteraction(draw.current);
+      options.onDrawEnd();
     });
 
     map.addInteraction(draw.current);

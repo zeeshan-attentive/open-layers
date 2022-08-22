@@ -21,7 +21,9 @@ body {
   padding: 7px 3px;
   gap: 3px;
 }
-
+.draw-tool-container {
+  position: relative;
+}
 .draw-tool {
   padding: 5px;
   width: 20px;
@@ -34,9 +36,14 @@ body {
 .cancel-box {
   cursor: pointer;
   position: absolute;
+  top: 0;
   left: 35px;
   color: white;
   font-size: 12px;
+  display: none;
+}
+.cancel-box.active {
+  display: flex;
 }
 
 .cancel-box-div {
