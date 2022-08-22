@@ -9,13 +9,13 @@ const InformationComponent = () => {
   const [lyr, setLyr] = useState();
   const [visible, setVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-
-  // Don't keep these i.e., color, width and opaicty states
+  
+  // Don't keep these i.e., color, width and opacity states
   // Directly update the layer style
-
+  
   const [index, setIndex] = useState();
   const [color, setColor] = useState({});
-
+  
   const showModal = () => {
     setModalVisible(true);
   };
@@ -24,28 +24,6 @@ const InformationComponent = () => {
 
   const refreshAllLayers = () => {
     setAllLayers(map.getLayersForView());
-  };
-
-  const hideLayers = () => {
-    setVisible(!visible);
-    map.hideAllLayers();
-  };
-
-  const handleZoom = (layer) => {
-    map.zoomToLayer(layer);
-  };
-
-  const handleDelete = (layer) => {
-    map.removeLayer(layer);
-    setAllLayers(map.getLayersForView());
-  };
-
-  const handleLayerView = (layer) => {
-    map.hideOneLayer(layer);
-  };
-
-  const exportGeojson = (layer) => {
-    map.exportLayerGeojson(layer);
   };
 
   return (
@@ -59,7 +37,10 @@ const InformationComponent = () => {
               : "https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/eye-24-1024.png"
           }
           alt=""
-          onClick={hideLayers}
+          onClick={() => {
+            setVisible(!visible);
+            map.hideAllLayers();
+          }}
         />
         <span> Hide all layers</span>
       </div>
@@ -85,25 +66,28 @@ const InformationComponent = () => {
                     <img
                       src="https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/eye-24-1024.png"
                       alt=""
-                      onClick={() => handleLayerView(e)}
+                      onClick={() => map.hideOneLayer(e)}
                       className="information-all-img"
                     />
                     <img
                       src="https://cdn-icons-png.flaticon.com/512/117/117453.png"
                       alt=""
-                      onClick={() => handleZoom(e)}
+                      onClick={() => map.zoomToLayer(e)}
                       className="information-all-img"
                     />
                     <img
                       src="https://cdn-icons-png.flaticon.com/512/1345/1345874.png"
                       alt=""
-                      onClick={() => handleDelete(e)}
+                      onClick={() => {
+                        map.removeLayer(e);
+                        setAllLayers(map.getLayersForView());
+                      }}
                       className="information-all-img"
                     />
                     <img
                       src="https://cdn-icons-png.flaticon.com/512/151/151900.png"
                       alt=""
-                      onClick={() => exportGeojson(e)}
+                      onClick={() => map.exportLayerGeojson(e)}
                       className="information-all-img"
                     />
                   </div>

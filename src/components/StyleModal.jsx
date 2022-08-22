@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import Slider from "@mui/material/Slider";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { HexColorPicker } from "react-colorful";
-import { MapContext } from "./MapComponent";
+import { dynamicStyles } from "../OlStyles";
 
 const StyleModal = ({
   modalVisible,
@@ -13,8 +13,6 @@ const StyleModal = ({
   setColor,
   lyr,
 }) => {
-  const map = useContext(MapContext);
-
   const style = {
     position: "absolute",
     top: "130px",
@@ -27,19 +25,6 @@ const StyleModal = ({
 
   const [width, setWidth] = useState({});
   const [opacity, setOpacity] = useState({});
-
-  // Don't use effect
-  // Directly update layer style from Modal
-
-  useEffect(() => {
-    if (!lyr) return;
-
-    const handleStyle = (lyr, width, color, opacity) => {
-      map.changeStyle(lyr, width, color, opacity);
-    };
-
-    handleStyle(lyr, width[index], color[index], opacity[index]);
-  }, [lyr, width, color, opacity, index, map]);
 
   return (
     <Modal
@@ -57,12 +42,14 @@ const StyleModal = ({
             color={color[index] || "#428dd7"}
             onChange={(value) => {
               setColor({ ...color, [index]: value });
+              dynamicStyles(lyr, width[index], value, opacity[index]);
             }}
           />
           <p className="information-layer-heading">Stroke Width:</p>
           <Slider
             onChange={(event, value) => {
               setWidth({ ...width, [index]: value });
+              dynamicStyles(lyr, value, color[index], opacity[index]);
             }}
             size="small"
             step={1}
@@ -76,10 +63,11 @@ const StyleModal = ({
           <Slider
             onChange={(event, value) => {
               setOpacity({ ...opacity, [index]: value });
+              dynamicStyles(lyr, width[index], color[index], value);
             }}
             size="small"
             step={0.1}
-            min={0}
+            min={0.1}
             max={1}
             defaultValue={0.3}
             aria-label="Small"

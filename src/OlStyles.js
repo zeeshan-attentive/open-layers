@@ -1,4 +1,6 @@
 import { Style, Stroke, Circle, Fill, Icon } from "ol/style";
+import { asArray } from "ol/color";
+import { GEOMETRY_TYPE } from "./Constants";
 
 export const mapStyles = {
   LineString: new Style({
@@ -56,4 +58,42 @@ export const editStyles = {
       }),
     }),
   }),
+};
+
+const getOpacity = (col, opacity) => {
+  let color = asArray(col);
+  color[3] = opacity;
+  return color;
+};
+
+export const dynamicStyles = (layer, width, color, opacity) => {
+  const source = layer.getSource();
+  let radius;
+
+  if (layer.get("id") === GEOMETRY_TYPE.POINT) {
+    radius = width;
+  }
+
+  const styles = {
+    LineString: new Style({
+      stroke: new Stroke({ color: color || "#428dd7", width: width || 3 }),
+    }),
+    Polygon: new Style({
+      stroke: new Stroke({ color: color || "#428dd7", width: width || 3 }),
+      fill: new Fill({
+        color: getOpacity(color || "rgb(66, 141, 215, 0.3)", opacity || 0.3),
+      }),
+    }),
+    Point: new Style({
+      image: new Circle({
+        radius: radius || 6,
+        fill: new Fill({ color: [0, 0, 0, 0] }),
+        stroke: new Stroke({ color: color || "#428dd7", width: 3 }),
+      }),
+    }),
+  };
+
+  source.forEachFeature((feature) => {
+    feature.setStyle(styles[feature.getGeometry().getType()]);
+  });
 };

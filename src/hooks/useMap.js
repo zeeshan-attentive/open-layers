@@ -9,16 +9,13 @@ import { defaults } from "ol/control";
 import {
   BASE_LAYER_ID,
   GEOJSON_LAYER_ID,
-  GEOMETRY_TYPE,
   GEOMETRY_TYPE_STRING,
   GOOGLE_IMAGERY_SATELLITE,
 } from "../Constants";
 import { Draw, Modify, defaults as defaultInteractions } from "ol/interaction";
-import { Style, Stroke, Circle, Fill } from "ol/style";
 import GeoJSON from "ol/format/GeoJSON";
 import data from "../files/random.json";
 import { editStyles, mapStyles } from "../OlStyles";
-import { asArray } from "ol/color";
 
 export const useMap = () => {
   const [map, setMap] = useState();
@@ -135,11 +132,17 @@ export const useMap = () => {
   const renderGeojson = () => {
     if (draw.current) cancelInteraction(draw.current);
 
+    let source = new VectorSource({
+      features: new GeoJSON().readFeatures(data),
+    });
+
     const geojsonLayer = new VectorLayer({
       id: GEOJSON_LAYER_ID,
-      source: new VectorSource({
-        features: new GeoJSON().readFeatures(data),
-      }),
+      source: source,
+    });
+
+    source.forEachFeature((feature) => {
+      feature.setStyle(mapStyles[feature.getGeometry().getType()]);
     });
 
     map.addLayer(geojsonLayer);
@@ -219,47 +222,6 @@ export const useMap = () => {
     console.log(finalObject);
   };
 
-  const getOpacity = (col, opacity) => {
-    let color = asArray(col);
-    color[3] = opacity;
-    console.log(opacity);
-    return color;
-  };
-
-  const changeStyle = (layer, width, color, opacity) => {
-    const source = layer.getSource();
-    let radius;
-    
-    if (layer.get("id") === GEOMETRY_TYPE.POINT) {
-      radius = width;
-    }
-
-    const styles = {
-      LineString: new Style({
-        stroke: new Stroke({ color: color || "#428dd7", width: width || 3 }),
-      }),
-      Polygon: new Style({
-        stroke: new Stroke({ color: color || "#428dd7", width: width || 3 }),
-        fill: new Fill({
-          color: color
-            ? getOpacity(color, opacity || 0.3)
-            : "rgb(66, 141, 215, 0.3)",
-        }),
-      }),
-      Point: new Style({
-        image: new Circle({
-          radius: radius || 6,
-          fill: new Fill({ color: [0, 0, 0, 0] }),
-          stroke: new Stroke({ color: color || "#428dd7", width: 3 }),
-        }),
-      }),
-    };
-
-    source.forEachFeature((feature) => {
-      feature.setStyle(styles[feature.getGeometry().getType()]);
-    });
-  };
-
   return {
     drawGeometry,
     cancelInteraction,
@@ -274,6 +236,5 @@ export const useMap = () => {
     removeLayer,
     hideOneLayer,
     exportLayerGeojson,
-    changeStyle,
   };
 };
