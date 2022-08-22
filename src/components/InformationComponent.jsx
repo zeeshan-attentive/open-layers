@@ -9,13 +9,10 @@ const InformationComponent = () => {
   const [lyr, setLyr] = useState();
   const [visible, setVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  
-  // Don't keep these i.e., color, width and opacity states
-  // Directly update the layer style
-  
+
   const [index, setIndex] = useState();
   const [color, setColor] = useState({});
-  
+
   const showModal = () => {
     setModalVisible(true);
   };

@@ -1,6 +1,5 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { MapContext, ToolContext } from "../components/MapComponent";
-import { GEOMETRY_TYPE } from "../Constants";
 
 const DrawTool = ({ geomType, image }) => {
   const map = useContext(MapContext);
@@ -18,12 +17,7 @@ const DrawTool = ({ geomType, image }) => {
           tools.activeTool === geomType ? "active" : ""
         }`}
       >
-        <span
-          onClick={() => {
-            tools.closeTool();
-          }}
-          className="cancel-box-div left"
-        >
+        <span onClick={tools.closeTool} className="cancel-box-div left">
           Cancel
         </span>
         <span

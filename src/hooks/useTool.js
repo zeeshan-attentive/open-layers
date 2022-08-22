@@ -12,7 +12,8 @@ export const useTool = (map) => {
 
   const closeTool = () => {
     setActiveTool(null);
+    // Add cancelAllInteraction
   };
 
-  return { activeTool, openDrawTool };
+  return { activeTool, openDrawTool, closeTool };
 };

@@ -70,14 +70,20 @@ export const useMap = () => {
     });
 
     draw.current.on("drawend", () => {
+      // Remove this cancelInteraction call from here
+      // Shift it to options.onDrawEnd callback
       cancelInteraction(draw.current);
+
       options.onDrawEnd();
     });
 
     map.addInteraction(draw.current);
   };
 
+  // rename it to cancelAllInteraction and don't pass any params
   const cancelInteraction = (draw) => {
+    // draw.current && map.removeInteraction(draw.current)
+    // modify.current && map.removeInteraction(modify.current)
     map.removeInteraction(draw);
   };
 
@@ -112,6 +118,7 @@ export const useMap = () => {
   };
 
   const cancelEdit = (geomType) => {
+    // Remove these two and call cancelAllInteraction
     cancelInteraction(modify.current);
     cancelInteraction(draw.current);
 
