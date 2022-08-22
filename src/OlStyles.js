@@ -7,7 +7,7 @@ export const mapStyles = {
     stroke: new Stroke({ color: "rgb(66, 141, 215)", width: 3 }),
     image: new Icon({
       scale: 0.06,
-      src: "https://cdn-icons.flaticon.com/png/512/4250/premium/4250315.png?token=exp=1661074814~hmac=c14f4946e0abf0e0f428cba3be805324",
+      src: "https://cdn-icons.flaticon.com/png/512/4250/premium/4250315.png?token=exp=1661165401~hmac=4f2d1b735a74245e00164915b5ec4a3c",
     }),
   }),
   Polygon: new Style({
@@ -17,7 +17,7 @@ export const mapStyles = {
     }),
     image: new Icon({
       scale: 0.06,
-      src: "https://cdn-icons.flaticon.com/png/512/4250/premium/4250315.png?token=exp=1661074814~hmac=c14f4946e0abf0e0f428cba3be805324",
+      src: "https://cdn-icons.flaticon.com/png/512/4250/premium/4250315.png?token=exp=1661165401~hmac=4f2d1b735a74245e00164915b5ec4a3c",
     }),
   }),
   Point: new Style({
@@ -87,7 +87,9 @@ export const dynamicStyles = (layer, width, color, opacity) => {
     Point: new Style({
       image: new Circle({
         radius: radius || 6,
-        fill: new Fill({ color: [0, 0, 0, 0] }),
+        fill: new Fill({
+          color: getOpacity(color || "rgb(66, 141, 215, 0.3)", opacity || 0.3),
+        }),
         stroke: new Stroke({ color: color || "#428dd7", width: 3 }),
       }),
     }),
