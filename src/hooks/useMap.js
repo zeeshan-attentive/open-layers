@@ -21,6 +21,7 @@ export const useMap = () => {
   const [map, setMap] = useState();
   const draw = useRef();
   const modify = useRef();
+  const style = useRef();
 
   useEffect(() => {
     const rasterlayer = new TileLayer({
@@ -61,7 +62,7 @@ export const useMap = () => {
     let layer = getLayerById(geomType);
     if (!layer) layer = addVectorLayer(geomType);
 
-    const source = layer.getSource();
+    let source = layer.getSource();
 
     draw.current = new Draw({
       source: source,
@@ -69,11 +70,12 @@ export const useMap = () => {
       style: mapStyles[GEOMETRY_TYPE_STRING[geomType]],
     });
 
-    draw.current.on("drawend", () => {
-      options.onDrawEnd();
-    });
-
     map.addInteraction(draw.current);
+
+    draw.current.on("drawend", (e) => {
+      options.onDrawEnd();
+      e.feature.setStyle(mapStyles[GEOMETRY_TYPE_STRING[geomType]]);
+    });
   };
 
   const cancelAllInteraction = () => {
@@ -98,6 +100,9 @@ export const useMap = () => {
     let layer = getLayerById(geomType);
     if (!layer) return;
 
+    let arr = layer.getSource().getFeatures();
+    style.current = arr[0].getStyle();
+
     const source = layer.getSource();
     modify.current = new Modify({ source: source });
 
@@ -115,12 +120,8 @@ export const useMap = () => {
 
     const source = layer.getSource();
 
-    setStyles(source, geomType);
-  };
-
-  const setStyles = (source, geomType) => {
     source.forEachFeature((feature) => {
-      feature.setStyle(mapStyles[GEOMETRY_TYPE_STRING[geomType]]);
+      feature.setStyle(style.current);
     });
   };
 

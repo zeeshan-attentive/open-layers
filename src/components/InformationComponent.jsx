@@ -9,7 +9,6 @@ const InformationComponent = () => {
   const [lyr, setLyr] = useState();
   const [visible, setVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-
   const [index, setIndex] = useState();
   const [color, setColor] = useState({});
 

@@ -10,7 +10,10 @@ const DrawTool = ({ geomType, image }) => {
   return (
     <div className="draw-tool-container">
       <img
-        onClick={() => tools.openDrawTool(geomType)}
+        onClick={() => {
+          setEdit(false);
+          tools.openDrawTool(geomType);
+        }}
         className="draw-tool"
         src={image}
         alt=""
@@ -22,6 +25,7 @@ const DrawTool = ({ geomType, image }) => {
       >
         <span
           onClick={() => {
+            setEdit(false);
             tools.closeTool(geomType);
           }}
           className="cancel-box-div left"

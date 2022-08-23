@@ -6,7 +6,7 @@ export const useTool = (map) => {
   const openDrawTool = (geomType) => {
     setActiveTool(geomType);
     map.drawGeometry(geomType, {
-      onDrawEnd: () => closeTool(),
+      onDrawEnd: () => closeTool(geomType),
     });
   };
 
