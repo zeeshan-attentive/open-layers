@@ -1,22 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { GEOMETRY_TYPE } from "../Constants";
 import DrawTool from "../Tools/DrawTool";
 import { MapContext } from "./MapComponent";
 
 const Toolbar = () => {
   const map = useContext(MapContext);
-
-  const [importToggle, setImportToggle] = useState(false);
-
-  const handleImport = () => {
-    if (!importToggle) {
-      setImportToggle(true);
-      map.renderGeojson();
-    } else {
-      setImportToggle(false);
-      map.removeGeojson();
-    }
-  };
 
   return (
     <div className="tools-div">
@@ -36,7 +24,7 @@ const Toolbar = () => {
       />
       <div className="import-button">
         <img
-          onClick={handleImport}
+          onClick={() => map.renderGeojson()}
           className="draw-tool"
           src="https://cdn-icons-png.flaticon.com/512/151/151901.png"
           alt=""

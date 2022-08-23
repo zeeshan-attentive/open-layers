@@ -10,9 +10,10 @@ export const useTool = (map) => {
     });
   };
 
-  const closeTool = () => {
+  const closeTool = (geomType) => {
     setActiveTool(null);
-    // Add cancelAllInteraction
+    map.cancelAllInteraction();
+    map.cancelEdit(geomType);
   };
 
   return { activeTool, openDrawTool, closeTool };

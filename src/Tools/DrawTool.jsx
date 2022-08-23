@@ -1,30 +1,42 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { MapContext, ToolContext } from "../components/MapComponent";
 
 const DrawTool = ({ geomType, image }) => {
   const map = useContext(MapContext);
   const tools = useContext(ToolContext);
 
-  const handleClick = () => {
-    tools.openDrawTool(geomType);
-  };
+  const [edit, setEdit] = useState(false);
 
   return (
     <div className="draw-tool-container">
-      <img onClick={handleClick} className="draw-tool" src={image} alt="" />
+      <img
+        onClick={() => tools.openDrawTool(geomType)}
+        className="draw-tool"
+        src={image}
+        alt=""
+      />
       <div
         className={`cancel-box ${
           tools.activeTool === geomType ? "active" : ""
         }`}
       >
-        <span onClick={tools.closeTool} className="cancel-box-div left">
+        <span
+          onClick={() => {
+            tools.closeTool(geomType);
+          }}
+          className="cancel-box-div left"
+        >
           Cancel
         </span>
         <span
-          onClick={() => map.editFeatures(geomType)}
+          onClick={() => {
+            setEdit(!edit);
+            if (!edit) map.editFeatures(geomType);
+            else tools.closeTool(geomType);
+          }}
           className="cancel-box-div right"
         >
-          Edit
+          {edit ? "Save" : "Edit"}
         </span>
       </div>
     </div>

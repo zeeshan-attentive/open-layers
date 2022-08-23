@@ -1,13 +1,14 @@
 import { Style, Stroke, Circle, Fill, Icon } from "ol/style";
 import { asArray } from "ol/color";
 import { GEOMETRY_TYPE } from "./Constants";
+import cross from "./images/crosshair.png";
 
 export const mapStyles = {
   LineString: new Style({
     stroke: new Stroke({ color: "rgb(66, 141, 215)", width: 3 }),
     image: new Icon({
       scale: 0.06,
-      src: "https://cdn-icons.flaticon.com/png/512/4250/premium/4250315.png?token=exp=1661165401~hmac=4f2d1b735a74245e00164915b5ec4a3c",
+      src: cross,
     }),
   }),
   Polygon: new Style({
@@ -17,7 +18,7 @@ export const mapStyles = {
     }),
     image: new Icon({
       scale: 0.06,
-      src: "https://cdn-icons.flaticon.com/png/512/4250/premium/4250315.png?token=exp=1661165401~hmac=4f2d1b735a74245e00164915b5ec4a3c",
+      src: cross,
     }),
   }),
   Point: new Style({

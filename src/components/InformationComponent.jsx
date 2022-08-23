@@ -84,7 +84,7 @@ const InformationComponent = () => {
                     <img
                       src="https://cdn-icons-png.flaticon.com/512/151/151900.png"
                       alt=""
-                      onClick={() => map.exportLayerGeojson(e)}
+                      onClick={() => map.exportGeojson(e)}
                       className="information-one-img"
                     />
                   </div>

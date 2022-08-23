@@ -56,7 +56,7 @@ export const useMap = () => {
   };
 
   const drawGeometry = (geomType, options) => {
-    draw.current && cancelInteraction(draw.current);
+    cancelAllInteraction();
 
     let layer = getLayerById(geomType);
     if (!layer) layer = addVectorLayer(geomType);
@@ -70,21 +70,15 @@ export const useMap = () => {
     });
 
     draw.current.on("drawend", () => {
-      // Remove this cancelInteraction call from here
-      // Shift it to options.onDrawEnd callback
-      cancelInteraction(draw.current);
-
       options.onDrawEnd();
     });
 
     map.addInteraction(draw.current);
   };
 
-  // rename it to cancelAllInteraction and don't pass any params
-  const cancelInteraction = (draw) => {
-    // draw.current && map.removeInteraction(draw.current)
-    // modify.current && map.removeInteraction(modify.current)
-    map.removeInteraction(draw);
+  const cancelAllInteraction = () => {
+    draw.current && map.removeInteraction(draw.current);
+    modify.current && map.removeInteraction(modify.current);
   };
 
   const getLayerById = (geomType) => {
@@ -107,9 +101,7 @@ export const useMap = () => {
     const source = layer.getSource();
     modify.current = new Modify({ source: source });
 
-    setStyles(source, geomType);
-
-    cancelInteraction(draw.current);
+    cancelAllInteraction();
     map.addInteraction(modify.current);
 
     source.forEachFeature((feature) => {
@@ -118,15 +110,10 @@ export const useMap = () => {
   };
 
   const cancelEdit = (geomType) => {
-    // Remove these two and call cancelAllInteraction
-    cancelInteraction(modify.current);
-    cancelInteraction(draw.current);
-
     let layer = getLayerById(geomType);
     if (!layer) return;
 
     const source = layer.getSource();
-    modify.current = new Modify({ source: source });
 
     setStyles(source, geomType);
   };
@@ -138,7 +125,7 @@ export const useMap = () => {
   };
 
   const renderGeojson = () => {
-    if (draw.current) cancelInteraction(draw.current);
+    cancelAllInteraction();
 
     let source = new VectorSource({
       features: new GeoJSON().readFeatures(data),
@@ -163,17 +150,24 @@ export const useMap = () => {
     map.removeLayer(layer);
   };
 
-  const exportGeojson = () => {
+  const exportGeojson = (layer) => {
     let features = [];
 
-    map.getAllLayers().forEach((layer) => {
-      if (layer.get("id") !== BASE_LAYER_ID) {
-        let source = layer.getSource();
-        source.forEachFeature((feature) => {
-          features.push(feature);
-        });
-      }
-    });
+    if (layer) {
+      let source = layer.getSource();
+      source.forEachFeature((feature) => {
+        features.push(feature);
+      });
+    } else {
+      map.getAllLayers().forEach((layer) => {
+        if (layer.get("id") !== BASE_LAYER_ID) {
+          let source = layer.getSource();
+          source.forEachFeature((feature) => {
+            features.push(feature);
+          });
+        }
+      });
+    }
 
     let geojson = new GeoJSON();
     let finalObject = geojson.writeFeaturesObject(features);
@@ -216,23 +210,9 @@ export const useMap = () => {
     layer.setVisible(!layer.getVisible());
   };
 
-  const exportLayerGeojson = (layer) => {
-    let features = [];
-
-    let source = layer.getSource();
-    source.forEachFeature((feature) => {
-      features.push(feature);
-    });
-
-    let geojson = new GeoJSON();
-    let finalObject = geojson.writeFeaturesObject(features);
-
-    console.log(finalObject);
-  };
-
   return {
     drawGeometry,
-    cancelInteraction,
+    cancelAllInteraction,
     editFeatures,
     cancelEdit,
     renderGeojson,
@@ -243,6 +223,5 @@ export const useMap = () => {
     zoomToLayer,
     removeLayer,
     hideOneLayer,
-    exportLayerGeojson,
   };
 };
