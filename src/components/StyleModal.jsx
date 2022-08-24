@@ -6,10 +6,10 @@ import { HexColorPicker } from "react-colorful";
 import { dynamicStyles } from "../OlStyles";
 
 const StyleModal = ({
-  modalVisible,
+  styleModalVisible,
   closeModal,
   color,
-  index,
+  layerId,
   setColor,
   lyr,
 }) => {
@@ -25,11 +25,11 @@ const StyleModal = ({
 
   const [width, setWidth] = useState({});
   const [opacity, setOpacity] = useState({});
-
+  
   return (
     <Modal
       className="modal-div"
-      open={modalVisible}
+      open={styleModalVisible}
       onClose={closeModal}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
@@ -39,17 +39,17 @@ const StyleModal = ({
         <div>
           <p className="hexcolor-heading">Fill and Outline:</p>
           <HexColorPicker
-            color={color[index] || "#428dd7"}
+            color={color[layerId] || "#428dd7"}
             onChange={(value) => {
-              setColor({ ...color, [index]: value });
-              dynamicStyles(lyr, width[index], value, opacity[index]);
+              setColor({ ...color, [layerId]: value });
+              dynamicStyles(lyr, width[layerId], value, opacity[layerId]);
             }}
           />
           <p className="information-layer-heading">Stroke Width:</p>
           <Slider
             onChange={(event, value) => {
-              setWidth({ ...width, [index]: value });
-              dynamicStyles(lyr, value, color[index], opacity[index]);
+              setWidth({ ...width, [layerId]: value });
+              dynamicStyles(lyr, value, color[layerId], opacity[layerId]);
             }}
             size="small"
             step={1}
@@ -62,8 +62,8 @@ const StyleModal = ({
           <p className="information-layer-heading">Opacity:</p>
           <Slider
             onChange={(event, value) => {
-              setOpacity({ ...opacity, [index]: value });
-              dynamicStyles(lyr, width[index], color[index], value);
+              setOpacity({ ...opacity, [layerId]: value });
+              dynamicStyles(lyr, width[layerId], color[layerId], value);
             }}
             size="small"
             step={0.1}
