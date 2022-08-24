@@ -7,9 +7,20 @@ const InformationComponent = () => {
 
   const [allLayers, setAllLayers] = useState([]);
   const [lyr, setLyr] = useState();
+
+  // Rename it to layersVisibe
   const [visible, setVisible] = useState(false);
+
+  // Rename it to styleModalVisible
   const [modalVisible, setModalVisible] = useState(false);
+
+  // It's not a good idea to use index (may cause bugs)
+  // It can be completely removed
   const [index, setIndex] = useState();
+
+  // Mapping should not be done using array indexing the logic is flawed
+  // If layer order is changed or layer is deleted.
+  // Instead user layer id to map a layer to its color
   const [color, setColor] = useState({});
 
   const showModal = () => {
@@ -33,6 +44,8 @@ const InformationComponent = () => {
               : "https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/eye-24-1024.png"
           }
           alt=""
+          // Don't use anonymous function
+          // Make a function named toggleLayersVisibility
           onClick={() => {
             setVisible(!visible);
             map.hideAllLayers();
@@ -51,6 +64,7 @@ const InformationComponent = () => {
                   <button
                     style={{ backgroundColor: color[i] || "#428dd7" }}
                     className="open-modal-btn"
+                    // Don't use anonymous function
                     onClick={() => {
                       setIndex(i);
                       setLyr(e);
@@ -87,6 +101,8 @@ const InformationComponent = () => {
                       className="information-one-img"
                     />
                   </div>
+                  {/* Don't pass index at all
+                  Don't pass color object itself,,, pass only the color corresponsing to the selected layer */}
                   <StyleModal
                     modalVisible={modalVisible}
                     closeModal={closeModal}

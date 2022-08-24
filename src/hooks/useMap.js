@@ -176,6 +176,7 @@ export const useMap = () => {
     console.log(finalObject);
   };
 
+  // Rename it to toggleLayers Visibility
   const hideAllLayers = () => {
     map.getAllLayers().forEach((lyr) => {
       if (lyr.get("id") !== BASE_LAYER_ID) {
