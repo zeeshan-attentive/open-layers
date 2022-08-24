@@ -115,14 +115,17 @@ export const useMap = () => {
   };
 
   const cancelEdit = (geomType) => {
+    cancelAllInteraction();
+
     let layer = getLayerById(geomType);
     if (!layer) return;
 
     const source = layer.getSource();
 
-    source.forEachFeature((feature) => {
-      feature.setStyle(style.current);
-    });
+    if (style.current)
+      source.forEachFeature((feature) => {
+        feature.setStyle(style.current);
+      });
   };
 
   const renderGeojson = () => {
@@ -176,8 +179,7 @@ export const useMap = () => {
     console.log(finalObject);
   };
 
-  // Rename it to toggleLayers Visibility
-  const hideAllLayers = () => {
+  const toggleLayersVisibility = () => {
     map.getAllLayers().forEach((lyr) => {
       if (lyr.get("id") !== BASE_LAYER_ID) {
         lyr.setVisible(!lyr.getVisible());
@@ -212,6 +214,10 @@ export const useMap = () => {
     layer.setVisible(!layer.getVisible());
   };
 
+  const getLayerId = (layer) => {
+    return layer.getProperties().id;
+  };
+
   return {
     drawGeometry,
     cancelAllInteraction,
@@ -220,10 +226,11 @@ export const useMap = () => {
     renderGeojson,
     removeGeojson,
     exportGeojson,
-    hideAllLayers,
+    toggleLayersVisibility,
     getLayersForView,
     zoomToLayer,
     removeLayer,
     hideOneLayer,
+    getLayerId,
   };
 };

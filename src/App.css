@@ -111,20 +111,20 @@ body {
   font-size: 18px;
 }
 
-.information-all-checkbox {
+.information-hide-allLayers {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.information-allLayers-checkbox {
   width: 20px;
   height: 20px;
   cursor: pointer;
   margin-left: 5px;
 }
 
-.information-hide-all {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.information-one-img {
+.information-layer-img {
   width: 18px;
   height: 18px;
   cursor: pointer;

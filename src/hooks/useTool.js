@@ -12,8 +12,6 @@ export const useTool = (map) => {
 
   const closeTool = (geomType) => {
     setActiveTool(null);
-    // Remove cancelAllInteraction from here,,, shift it to cancelEdit itself
-    map.cancelAllInteraction();
     map.cancelEdit(geomType);
   };
 
